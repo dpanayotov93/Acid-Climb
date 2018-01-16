@@ -129,7 +129,7 @@ Game.prototype.updateCamera = function() {
 	var delta = this.player.y - (this.screen.bottom - this.options.tileSize - (this.player.height / 2));
 
 	// this.stage.pivot.y = delta;
-	console.log(this.stage.pivot.y, delta);
+	// console.log(this.stage.pivot.y, delta);
 };
 
 Game.prototype.render = function() {

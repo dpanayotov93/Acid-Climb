@@ -171,6 +171,17 @@ Player.prototype.update = function() {
 	// Check the collisions
 	this.collision = this.detectCollision();
 
+	if(this.state.jumping) {
+		this.collision = this.detectCollision();
+		if (this.collision.top) {
+			// If the player hits a tile above him stop jumping
+			this.state.jumping = false;
+		};
+		if(this.state.jumping) {
+			this.y -= this.stats.speed / 2;	
+		};
+	};
+
 	if (this.collision.top) {
 		// If the player hits a tile above him stop jumping
 		this.state.jumping = false;
@@ -180,11 +191,11 @@ Player.prototype.update = function() {
 		// If the player hits a tile bellow him stop jumping
 		this.state.falling = false;
 		// TODO: Fix this mess bellow - repositioning after gravity falling
-		if (game.screen.width >= 1700) {
-			this.y = (this.collision.bottom.getGlobalPosition().y - this.collision.bottom.height / 2 - this.height / 2) - (game.screen.width / game.options.ratio / 2) / game.options.tileSize;
-		} else {
-			this.y = (this.collision.bottom.getGlobalPosition().y - this.collision.bottom.height / 2 - this.height / 2) - (game.screen.width / game.options.ratio) / game.options.tileSize;
-		};
+		// if (game.screen.width >= 1700) {
+		// 	this.y = (this.collision.bottom.getGlobalPosition().y - this.collision.bottom.height / 2 - this.height / 2) - (game.screen.width / game.options.ratio / 2) / game.options.tileSize;
+		// } else {
+		// 	this.y = (this.collision.bottom.getGlobalPosition().y - this.collision.bottom.height / 2 - this.height / 2) - (game.screen.width / game.options.ratio) / game.options.tileSize;
+		// };
 	};
 
 	// Update the bullets
@@ -194,7 +205,6 @@ Player.prototype.update = function() {
 	this.applyGravity();
 
 	if(this.holdingTouch) {
-		console.log('AAA')
 		this.move(this.directionTouch);
 	};
 
@@ -239,6 +249,7 @@ Player.prototype.jump = function() {
 	if (!this.collision.top && !this.state.falling) {
 		this.state.jumping = true;
 		this.jumpData.target = this.y - this.jumpData.height;
+		/*
 		while (this.y > this.jumpData.target) {
 			this.collision = this.detectCollision();
 
@@ -246,9 +257,10 @@ Player.prototype.jump = function() {
 				break;
 			};
 
-			this.y -= this.stats.speed / 4 * game.options.ratio; // TODO: Not really working - implement some kind of tweening
+			this.y -= 1; // TODO: Not really working - implement some kind of tweening
 		};
-		this.state.jumping = false;
+		*/
+		// this.state.jumping = false;
 	};
 };
 
