@@ -85,12 +85,20 @@ Game.prototype.fitToScreenWidth = function() {
 	this.renderer.resize(window.innerWidth, window.innerHeight);
 };
 
-Game.prototype.requestLock = function() {
-	canvas.requestPointerLock();
-	if(document.pointerLockElement === canvas ||
-	  document.mozPointerLockElement === canvas) {
-		game.player.shoot();
-	  };
+Game.prototype.requestLock = function(e) {
+  	if(e.type === 'touchend') {
+  		console.log(e.changedTouches[0].clientX);
+  		game.player.crosshair.x = e.changedTouches[0].clientX;
+  		game.player.crosshair.y = e.changedTouches[0].clientY;
+  		game.player.updateCrosshairTouch();
+  		game.player.shoot();  		
+  	} else {
+		canvas.requestPointerLock();
+		if(document.pointerLockElement === canvas ||
+		  document.mozPointerLockElement === canvas) {
+			game.player.shoot();
+		};
+	};
 };
 
 Game.prototype.lockChange = function() {

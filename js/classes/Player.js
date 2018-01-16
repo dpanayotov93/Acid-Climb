@@ -12,7 +12,8 @@ function Player(options) {
 		max: 0
 	};
 	this.stats = {
-		speed: 20
+		speed: 20,
+		fireRate: 50
 	};
 	this.state = {
 		jumping: false,
@@ -83,6 +84,7 @@ Player.prototype.addEvents = function() {
 	document.addEventListener('pointerlockchange', game.lockChange, false);
 	document.addEventListener('mozpointerlockchange', game.lockChange, false);
 	canvas.addEventListener('mousedown', game.requestLock);
+	canvas.addEventListener('touchend', game.requestLock);
 };
 
 Player.prototype.addCrosshair = function() {
@@ -93,6 +95,10 @@ Player.prototype.addCrosshair = function() {
 	this.crosshair.anchor.set(.25 * game.options.ratio);
 	this.crosshair.x = game.screen.width / 2 - this.crosshair.width / 2;
 	this.crosshair.y = game.screen.height / 2 - this.crosshair.height / 2;
+
+	if(mobileAndTabletcheck()) {
+		this.crosshair.visible = false;
+	};
 
 	game.stage.addChild(this.crosshair);
 };
@@ -111,6 +117,14 @@ Player.prototype.updateCrosshair = function(e) {
 	}
 };
 
+Player.prototype.updateCrosshairTouch = function() {
+	if (this.x > this.crosshair.x) {
+		this.scale.x = -.75 * game.options.ratio;
+	} else {
+		this.scale.x = .75 * game.options.ratio;
+	}
+};
+
 Player.prototype.onKeyUp = function(e) {
 	// Unregister the key
 	this.keys[e.code] = false;
@@ -126,10 +140,12 @@ Player.prototype.update = function() {
 	this.collision = this.detectCollision();
 
 	if (this.collision.top) {
+		// If the player hits a tile above him stop jumping
 		this.state.jumping = false;
 	};
 
 	if (this.collision.bottom) {
+		// If the player hits a tile bellow him stop jumping
 		this.state.falling = false;
 		// TODO: Fix this mess bellow - repositioning after gravity falling
 		if (game.screen.width >= 1700) {
@@ -142,7 +158,10 @@ Player.prototype.update = function() {
 	// Update the bullets
 	this.updateBullets();
 
+	// Constantly apply gravity
 	this.applyGravity();
+
+	// Check user input
 	this.checkKeys();
 };
 
@@ -169,8 +188,12 @@ Player.prototype.checkKeys = function() {
 
 Player.prototype.move = function(direction) {
 	if (direction > 0 && !this.collision.right) {
+		this.scale.x = .75 * game.options.ratio;
+
 		this.x += this.stats.speed * game.options.ratio;
 	} else if (direction < 0 && !this.collision.left) {
+		this.scale.x = -.75 * game.options.ratio;
+		
 		this.x -= this.stats.speed * game.options.ratio;
 	};
 };
@@ -209,8 +232,15 @@ Player.prototype.addBullet = function() {
 	var bullet = new PIXI.Sprite(
 		game.assets['bullet'].texture
 	); // TODO: Create Bullet class
-	bullet.x = this.x;
-	bullet.y = this.y;
+
+	if(this.scale.x > 0) {
+		bullet.x = this.x;
+		bullet.y = this.y;
+	} else {
+		bullet.x = this.x - (this.width / 5) * game.options.ratio;
+		bullet.y = this.y + 20 * game.options.ratio;
+	};
+	
 	bullet.scale.set(.5 * game.options.ratio);
 	bullet.rotation = this.rotateBullet(this.crosshair.x, this.crosshair.y, bullet.x, bullet.y);
 	this.bullets.push(bullet);
@@ -230,8 +260,8 @@ Player.prototype.updateBullets = function() {
 	for (var i = this.bullets.length - 1; i >= 0; i--) {
 		var bullet = this.bullets[i];
 		if(bullet == null) continue;
-		bullet.position.x += Math.cos(bullet.rotation) * 30;
-		bullet.position.y += Math.sin(bullet.rotation) * 30;
+		bullet.position.x += Math.cos(bullet.rotation) * this.stats.fireRate;
+		bullet.position.y += Math.sin(bullet.rotation) * this.stats.fireRate;
 
 
 		// Destroy the bullet if it collides with a sprite
