@@ -42,7 +42,7 @@ Floor.prototype.fillFloor = function() {
 		// Add a tile unless it's the hole positions in which case add a door on top of the hole
 		if (i !== this.hole.position) {
 			this.addTile(i * game.options.tileSize);
-		} else {
+		} else if(this.n > 1) {
 			this.addDoor();
 		};
 	};	

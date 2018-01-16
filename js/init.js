@@ -1,6 +1,6 @@
 'use strict';
 
-var game;
+var game, canvas;
 
 // Start the program logic
 window.onload = function() {
