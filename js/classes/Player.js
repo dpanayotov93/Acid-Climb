@@ -161,6 +161,13 @@ Player.prototype.onKeyDown = function(e) {
 };
 
 Player.prototype.update = function() {
+	// Update the camera
+	if(game.screen.height / 2 <= game.screen.height - this.y) {
+		game.updateCamera();
+	} else {
+		game.stage.pivot.y = 0;
+	};	
+
 	// Check the collisions
 	this.collision = this.detectCollision();
 
@@ -239,7 +246,7 @@ Player.prototype.jump = function() {
 				break;
 			};
 
-			this.y -= this.stats.speed / 4 * game.options.ratio;
+			this.y -= this.stats.speed / 4 * game.options.ratio; // TODO: Not really working - implement some kind of tweening
 		};
 		this.state.jumping = false;
 	};
@@ -256,6 +263,11 @@ Player.prototype.applyGravity = function() {
 
 Player.prototype.shoot = function() {
 	this.addBullet();
+	if (game.player.x > game.player.crosshair.x) {
+		game.player.scale.x = -.75 * game.options.ratio;
+	} else {
+		game.player.scale.x = .75 * game.options.ratio;
+	}	
 };
 
 Player.prototype.addBullet = function() {

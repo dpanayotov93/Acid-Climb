@@ -64,7 +64,7 @@ Game.prototype.init = function() {
 	this.player.init();
 
 	if(mobileAndTabletcheck()) {
-		// TODO: Add mobile controls
+		document.getElementById('mobile-controls').style.display = 'block';
 	};
 
 	// Add the debug screen - REMOVE WHEN DONE
@@ -123,6 +123,13 @@ Game.prototype.update = function(time) {
 	this.ticker.update(time);
 	this.player.update();
 	this.render();
+};
+
+Game.prototype.updateCamera = function() {
+	var delta = this.player.y - (this.screen.bottom - this.options.tileSize - (this.player.height / 2));
+
+	// this.stage.pivot.y = delta;
+	console.log(this.stage.pivot.y, delta);
 };
 
 Game.prototype.render = function() {
