@@ -26,6 +26,7 @@ function Player(options) {
 	};
 	this.bullets = [];
 	this.crosshair = null;
+	this.holdingTouch = false;
 };
 
 // Assign the prototype and constructor
@@ -84,7 +85,31 @@ Player.prototype.addEvents = function() {
 	document.addEventListener('pointerlockchange', game.lockChange, false);
 	document.addEventListener('mozpointerlockchange', game.lockChange, false);
 	canvas.addEventListener('mousedown', game.requestLock);
-	canvas.addEventListener('touchend', game.requestLock);
+
+
+	// Touch controls
+	if(mobileAndTabletcheck) {
+		var moveIcon = document.getElementById('move');
+		var jumpIcon = document.getElementById('jump');
+
+		canvas.addEventListener('touchend', game.requestLock);
+		moveIcon.addEventListener('touchstart', function(e) {
+			game.player.directionTouch = e.target.clientWidth / 2 < e.changedTouches[0].clientX ? 1 : -1;
+			game.player.holdingTouch = true;			
+		}, false);
+
+		moveIcon.addEventListener('touchmove', function(e) {
+			game.player.directionTouch = e.target.clientWidth / 2 < e.changedTouches[0].clientX ? 1 : -1;
+		}, false);	
+
+		moveIcon.addEventListener('touchend', function() {
+			game.player.holdingTouch = false;			
+		}, false);		
+
+		jumpIcon.addEventListener('touchend', function() {
+			game.player.jump()
+		}, false);
+	};
 };
 
 Player.prototype.addCrosshair = function() {
@@ -160,6 +185,11 @@ Player.prototype.update = function() {
 
 	// Constantly apply gravity
 	this.applyGravity();
+
+	if(this.holdingTouch) {
+		console.log('AAA')
+		this.move(this.directionTouch);
+	};
 
 	// Check user input
 	this.checkKeys();

@@ -7,16 +7,49 @@
   <style type="text/css">
     * { margin: 0; padding: 0; }
     body { background-image: url(assets/backgrounds/hull_pattern.jpg); }
+    canvas { z-index: 10; }
+    #mobile-controls {
+	    position: absolute;
+	    bottom: 0;
+	    width: 100%;
+	    height: 10vw;
+	    z-index: 100;
+	    touch-action: none;
+	}
+		#mobile-controls .controls {
+	    	height: 100%;
+	    	border: none;
+			background: none;
+	    	display: inline-block;
+    	    background-position: center;
+		    outline: none;    	    
+		}
+		#mobile-controls #move {
+		    width: 25vw;
+			float: left;
+			background-image: url(assets/ui/move.png);
+			background-size: cover;
+		}
+		#mobile-controls #jump {
+		    width: 10vw;
+			float: right;
+			background-image: url(assets/ui/jump.png);
+			background-size: contain;
+		}
   </style>
 
   <!-- Load external libraries -->
   <script src="js/lib/pixi.min.js"></script>
 <body>
-  <!-- Load internal scripts  -->
-  <script src="js/classes/Player.js"></script>
-  <script src="js/classes/Floor.js"></script>
-  <script src="js/classes/Game.js"></script>
+	<div id="mobile-controls">
+		<button id="move" class="controls"></button>
+		<button id="jump" class="controls"></button>
+	</div>
+	<!-- Load internal scripts  -->
+	<script src="js/classes/Player.js"></script>
+	<script src="js/classes/Floor.js"></script>
+	<script src="js/classes/Game.js"></script>
 
-  <script src="js/init.js"></script>
+	<script src="js/init.js"></script>
 </body>
 </html>

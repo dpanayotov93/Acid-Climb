@@ -63,6 +63,10 @@ Game.prototype.init = function() {
 	// Add the player
 	this.player.init();
 
+	if(mobileAndTabletcheck()) {
+		// TODO: Add mobile controls
+	};
+
 	// Add the debug screen - REMOVE WHEN DONE
 	this.debug_text = new PIXI.Text('', {
 		fontFamily: 'Courier New',
@@ -87,7 +91,6 @@ Game.prototype.fitToScreenWidth = function() {
 
 Game.prototype.requestLock = function(e) {
   	if(e.type === 'touchend') {
-  		console.log(e.changedTouches[0].clientX);
   		game.player.crosshair.x = e.changedTouches[0].clientX;
   		game.player.crosshair.y = e.changedTouches[0].clientY;
   		game.player.updateCrosshairTouch();
