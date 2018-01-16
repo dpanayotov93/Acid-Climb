@@ -57,7 +57,8 @@ Game.prototype.init = function() {
 	this.floors.y = game.screen.bottom - game.options.tileSize;
 	this.stage.addChild(this.floors);
 	for (var i = 0; i < this.size.height / 2 + 1; i++) {
-		var floor = new Floor(this.floors.children.length);
+		var count = this.floors.children.length;
+		var floor = new Floor(count);
 	};
 
 	// Add the player

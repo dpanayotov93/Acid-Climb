@@ -1,0 +1,11 @@
+{
+    "globals": { 
+        "PIXI": true,
+        "window": true,
+        "document": true,
+        "canvas": true,
+        "game": true,
+        "mobileAndTabletcheck": true,
+        "performance": true
+    }
+}

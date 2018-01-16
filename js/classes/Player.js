@@ -34,7 +34,7 @@ Player.prototype = Object.create(PIXI.extras.AnimatedSprite.prototype);
 Player.prototype.constructor = Player;
 
 // Methods
-Player.prototype.init = function() {
+Player.prototype.init = function () {
 	// Extract the frames for the different animations and create them
 	this.createAnimations();
 
@@ -51,27 +51,27 @@ Player.prototype.init = function() {
 	game.stage.addChild(this);
 };
 
-Player.prototype.createAnimations = function() {
+Player.prototype.createAnimations = function () {
 	// Extract the iddle frames from the atlas
-	var iddleFrames = Object.keys(game.assets['char_atlas'].textures).filter(function(key) {
+	var iddleFrames = Object.keys(game.assets['char_atlas'].textures).filter(function (key) {
 		return key.includes('Walk_001') || key.includes('Walk_002')
 	});
 
 	// Push the extracted frames to the iddle animations container
-	for (let i = 0; i < Object.keys(iddleFrames).length; i++) {
+	for (var i = 0; i < Object.keys(iddleFrames).length; i++) {
 		this.animations.iddle.push(PIXI.Texture.fromFrame(iddleFrames[i]));
 	};
 };
 
-Player.prototype.setup = function() {
+Player.prototype.setup = function () {
 	// Call the constructor of the AnimatedSprite class
 	PIXI.extras.AnimatedSprite.call(this, this.animations.iddle);
 
 	// Set the initial class properties
 	this.x = (game.size.width / 2 * game.options.tileSize) + (this.width / 2 * game.options.ratio) + game.size.margin / 2;
 	this.y = game.screen.bottom - game.options.tileSize - (this.height / 2);
-	this.scale.set(.75 * game.options.ratio);
-	this.anchor.set(.5 * game.options.ratio);
+	this.scale.set(0.75 * game.options.ratio);
+	this.anchor.set(0.5 * game.options.ratio);
 	this.animationSpeed = .15;
 	this.jumpData.height = game.options.tileSize * 2.25;
 
@@ -79,7 +79,7 @@ Player.prototype.setup = function() {
 	this.jump(); // TODO: Change this dirty fix for the wrong initial and after falling Y positioning ...
 };
 
-Player.prototype.addEvents = function() {
+Player.prototype.addEvents = function () {
 	document.addEventListener('keydown', this.onKeyDown.bind(this));
 	document.addEventListener('keyup', this.onKeyUp.bind(this));
 	document.addEventListener('pointerlockchange', game.lockChange, false);
@@ -88,47 +88,47 @@ Player.prototype.addEvents = function() {
 
 
 	// Touch controls
-	if(mobileAndTabletcheck) {
+	if (mobileAndTabletcheck) {
 		var moveIcon = document.getElementById('move');
 		var jumpIcon = document.getElementById('jump');
 
 		canvas.addEventListener('touchend', game.requestLock);
-		moveIcon.addEventListener('touchstart', function(e) {
+		moveIcon.addEventListener('touchstart', function (e) {
 			game.player.directionTouch = e.target.clientWidth / 2 < e.changedTouches[0].clientX ? 1 : -1;
-			game.player.holdingTouch = true;			
+			game.player.holdingTouch = true;
 		}, false);
 
-		moveIcon.addEventListener('touchmove', function(e) {
+		moveIcon.addEventListener('touchmove', function (e) {
 			game.player.directionTouch = e.target.clientWidth / 2 < e.changedTouches[0].clientX ? 1 : -1;
-		}, false);	
+		}, false);
 
-		moveIcon.addEventListener('touchend', function() {
-			game.player.holdingTouch = false;			
-		}, false);		
+		moveIcon.addEventListener('touchend', function () {
+			game.player.holdingTouch = false;
+		}, false);
 
-		jumpIcon.addEventListener('touchend', function() {
-			game.player.jump()
+		jumpIcon.addEventListener('touchend', function () {
+			game.player.jump();
 		}, false);
 	};
 };
 
-Player.prototype.addCrosshair = function() {
+Player.prototype.addCrosshair = function () {
 	this.crosshair = new PIXI.Sprite(
-		game.assets['crosshair'].texture
+		game.assets.crosshair.texture
 	);
-	this.crosshair.scale.set(.25 * game.options.ratio);
-	this.crosshair.anchor.set(.25 * game.options.ratio);
+	this.crosshair.scale.set(0.25 * game.options.ratio);
+	this.crosshair.anchor.set(0.25 * game.options.ratio);
 	this.crosshair.x = game.screen.width / 2 - this.crosshair.width / 2;
 	this.crosshair.y = game.screen.height / 2 - this.crosshair.height / 2;
 
-	if(mobileAndTabletcheck()) {
+	if (mobileAndTabletcheck()) {
 		this.crosshair.visible = false;
 	};
 
 	game.stage.addChild(this.crosshair);
 };
 
-Player.prototype.updateCrosshair = function(e) {
+Player.prototype.updateCrosshair = function (e) {
 	var x = e.movementX;
 	var y = e.movementY;
 
@@ -136,49 +136,49 @@ Player.prototype.updateCrosshair = function(e) {
 	game.player.crosshair.y += y;
 
 	if (game.player.x > game.player.crosshair.x) {
-		game.player.scale.x = -.75 * game.options.ratio;
+		game.player.scale.x = -0.75 * game.options.ratio;
 	} else {
-		game.player.scale.x = .75 * game.options.ratio;
+		game.player.scale.x = 0.75 * game.options.ratio;
 	}
 };
 
-Player.prototype.updateCrosshairTouch = function() {
+Player.prototype.updateCrosshairTouch = function () {
 	if (this.x > this.crosshair.x) {
-		this.scale.x = -.75 * game.options.ratio;
+		this.scale.x = -0.75 * game.options.ratio;
 	} else {
-		this.scale.x = .75 * game.options.ratio;
+		this.scale.x = 0.75 * game.options.ratio;
 	}
 };
 
-Player.prototype.onKeyUp = function(e) {
+Player.prototype.onKeyUp = function (e) {
 	// Unregister the key
 	this.keys[e.code] = false;
 };
 
-Player.prototype.onKeyDown = function(e) {
+Player.prototype.onKeyDown = function (e) {
 	// Register the key
 	this.keys[e.code] = true;
 };
 
-Player.prototype.update = function() {
+Player.prototype.update = function () {
 	// Update the camera
-	if(game.screen.height / 2 <= game.screen.height - this.y) {
+	if (game.screen.height / 2 <= game.screen.height - this.y) {
 		game.updateCamera();
 	} else {
 		game.stage.pivot.y = 0;
-	};	
+	};
 
 	// Check the collisions
 	this.collision = this.detectCollision();
 
-	if(this.state.jumping) {
+	if (this.state.jumping) {
 		this.collision = this.detectCollision();
 		if (this.collision.top) {
 			// If the player hits a tile above him stop jumping
 			this.state.jumping = false;
 		};
-		if(this.state.jumping) {
-			this.y -= this.stats.speed / 2;	
+		if (this.state.jumping) {
+			this.y -= this.stats.speed / 2;
 		};
 	};
 
@@ -204,7 +204,7 @@ Player.prototype.update = function() {
 	// Constantly apply gravity
 	this.applyGravity();
 
-	if(this.holdingTouch) {
+	if (this.holdingTouch) {
 		this.move(this.directionTouch);
 	};
 
@@ -212,20 +212,20 @@ Player.prototype.update = function() {
 	this.checkKeys();
 };
 
-Player.prototype.checkKeys = function() {
+Player.prototype.checkKeys = function () {
 	// Jumping
-	if (this.keys['ArrowUp'] || this.keys['KeyW']) {
+	if (this.keys.ArrowUp || this.keys.KeyW) {
 		this.jump();
 	};
 
 	// Movement
-	if (this.keys['ArrowLeft'] || this.keys['ArrowRight'] || this.keys['KeyA'] || this.keys['KeyD']) {
+	if (this.keys.ArrowLeft || this.keys.ArrowRight || this.keys.KeyA || this.keys.KeyD) {
 		var direction = null;
 
-		if (this.keys['ArrowLeft'] || this.keys['KeyA']) {
+		if (this.keys.ArrowLeft || this.keys.KeyA) {
 			direction = -1;
 		};
-		if (this.keys['ArrowRight'] || this.keys['KeyD']) {
+		if (this.keys.ArrowRight || this.keys.KeyD) {
 			direction = 1;
 		};
 
@@ -233,19 +233,19 @@ Player.prototype.checkKeys = function() {
 	};
 };
 
-Player.prototype.move = function(direction) {
+Player.prototype.move = function (direction) {
 	if (direction > 0 && !this.collision.right) {
-		this.scale.x = .75 * game.options.ratio;
+		this.scale.x = 0.75 * game.options.ratio;
 
 		this.x += this.stats.speed * game.options.ratio;
 	} else if (direction < 0 && !this.collision.left) {
-		this.scale.x = -.75 * game.options.ratio;
-		
+		this.scale.x = -0.75 * game.options.ratio;
+
 		this.x -= this.stats.speed * game.options.ratio;
 	};
 };
 
-Player.prototype.jump = function() {
+Player.prototype.jump = function () {
 	if (!this.collision.top && !this.state.falling) {
 		this.state.jumping = true;
 		this.jumpData.target = this.y - this.jumpData.height;
@@ -264,7 +264,7 @@ Player.prototype.jump = function() {
 	};
 };
 
-Player.prototype.applyGravity = function() {
+Player.prototype.applyGravity = function () {
 	if (!this.state.jumping && !this.collision.bottom) {
 		this.state.falling = true;
 
@@ -273,35 +273,35 @@ Player.prototype.applyGravity = function() {
 	};
 };
 
-Player.prototype.shoot = function() {
+Player.prototype.shoot = function () {
 	this.addBullet();
 	if (game.player.x > game.player.crosshair.x) {
-		game.player.scale.x = -.75 * game.options.ratio;
+		game.player.scale.x = -0.75 * game.options.ratio;
 	} else {
-		game.player.scale.x = .75 * game.options.ratio;
-	}	
+		game.player.scale.x = 0.75 * game.options.ratio;
+	}
 };
 
-Player.prototype.addBullet = function() {
+Player.prototype.addBullet = function () {
 	var bullet = new PIXI.Sprite(
-		game.assets['bullet'].texture
+		game.assets.bullet.texture
 	); // TODO: Create Bullet class
 
-	if(this.scale.x > 0) {
+	if (this.scale.x > 0) {
 		bullet.x = this.x;
 		bullet.y = this.y;
 	} else {
 		bullet.x = this.x - (this.width / 5) * game.options.ratio;
 		bullet.y = this.y + 20 * game.options.ratio;
 	};
-	
-	bullet.scale.set(.5 * game.options.ratio);
+
+	bullet.scale.set(0.5 * game.options.ratio);
 	bullet.rotation = this.rotateBullet(this.crosshair.x, this.crosshair.y, bullet.x, bullet.y);
 	this.bullets.push(bullet);
 	game.stage.addChild(bullet);
 };
 
-Player.prototype.rotateBullet = function(mx, my, px, py) {
+Player.prototype.rotateBullet = function (mx, my, px, py) {
 	var dist_Y = my - py;
 	var dist_X = mx - px;
 	var angle = Math.atan2(dist_Y, dist_X);
@@ -309,24 +309,23 @@ Player.prototype.rotateBullet = function(mx, my, px, py) {
 	return angle;
 };
 
-Player.prototype.updateBullets = function() {
-	loop:
-	for (var i = this.bullets.length - 1; i >= 0; i--) {
+Player.prototype.updateBullets = function () {
+	loop: for (var i = this.bullets.length - 1; i >= 0; i--) {
 		var bullet = this.bullets[i];
-		if(bullet == null) continue;
+		if (bullet == null) continue;
 		bullet.position.x += Math.cos(bullet.rotation) * this.stats.fireRate;
 		bullet.position.y += Math.sin(bullet.rotation) * this.stats.fireRate;
 
 
 		// Destroy the bullet if it collides with a sprite
 		for (var j = 0; j < game.floors.children.length; j++) {
-			if(bullet == null) continue;
+			if (bullet == null) continue;
 			var floor = game.floors.children[j];
 
-			for(var k = 0; k < floor.children.length; k++) {
+			for (var k = 0; k < floor.children.length; k++) {
 				var tile = floor.children[k];
 
-				if(intersect(bullet, tile)) {
+				if (intersect(bullet, tile)) {
 					bullet.destroy();
 					this.bullets.splice(i, 1);
 					break loop;
@@ -349,11 +348,11 @@ Player.prototype.updateBullets = function() {
 			return true;
 		} else {
 			return false;
-		};		
+		};
 	};
 };
 
-Player.prototype.detectCollision = function() {
+Player.prototype.detectCollision = function () {
 	var collision = {
 		top: false,
 		bottom: false,
@@ -393,7 +392,7 @@ Player.prototype.detectCollision = function() {
 	return collision;
 };
 
-Player.prototype.intersect = function(sprite) {
+Player.prototype.intersect = function (sprite) {
 	var ab = this.getBounds();
 	var bb = sprite.getBounds();
 
