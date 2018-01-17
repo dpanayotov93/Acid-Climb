@@ -366,23 +366,25 @@ Player.prototype.detectCollision = function() {
 
 		for (var j = 0; j < floor.children.length; j++) {
 			var tile = floor.children[j];
+			var tileGlobalX = tile.getGlobalPosition().x + game.stage.pivot.x;
+			var tileGlobalY = tile.getGlobalPosition().y + game.stage.pivot.y;
 
 			if (this.intersect(tile)) {
-				if (this.y < tile.getGlobalPosition().y + tile.height / 2 &&
-					this.y > tile.getGlobalPosition().y - tile.height / 2
+				if (this.y < tileGlobalY + tile.height / 2 &&
+					this.y > tileGlobalY - tile.height / 2
 				) {
-					if (this.x + this.width / 2 > tile.getGlobalPosition().x + this.width / 2) {
+					if (this.x + this.width / 2 > tileGlobalX + this.width / 2) {
 						collision.left = tile;
 					};
 
-					if (this.x - this.width / 2 < tile.getGlobalPosition().x - this.width / 2) {
+					if (this.x - this.width / 2 < tileGlobalX - this.width / 2) {
 						collision.right = tile;
 					};
 
 				} else {
-					if (tile.getGlobalPosition().y - tile.height / 2 < this.y) {
+					if (tileGlobalY - tile.height / 2 < this.y) {
 						collision.top = tile;
-					} else if (tile.getGlobalPosition().y + tile.height / 2 > this.y) {
+					} else if (tileGlobalY + tile.height / 2 > this.y) {
 						collision.bottom = tile;
 					};
 				};

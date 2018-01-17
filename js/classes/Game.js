@@ -126,10 +126,10 @@ Game.prototype.update = function(time) {
 };
 
 Game.prototype.updateCamera = function() {
-	var delta = this.player.y - (this.screen.bottom - this.options.tileSize - (this.player.height / 2));
-
-	// this.stage.pivot.y = delta;
-	// console.log(this.stage.pivot.y, delta);
+	this.stage.pivot.y = this.player.position.y - 500;
+	// this.stage.pivot.x = this.player.position.x;
+	// this.stage.position.x = this.renderer.width/2;
+	// this.stage.position.y = this.renderer.height/2;
 };
 
 Game.prototype.render = function() {
@@ -148,10 +148,10 @@ Game.prototype.render = function() {
 			Falling: ${this.player.state.falling}
 			\n
 			[COLLISIONS]
-			Top: ${this.player.collision.top}
-			Bottom: ${this.player.collision.bottom}
-			Left: ${this.player.collision.left}
-			Right: ${this.player.collision.right}
+			Top: ${this.player.collision.top === false ? false : true}
+			Bottom: ${this.player.collision.bottom === false ? false : true}
+			Left: ${this.player.collision.left === false ? false : true}
+			Right: ${this.player.collision.right === false ? false : true}
 		`;	
 	};
 };
