@@ -18,10 +18,13 @@ Floor.prototype.constructor = Floor;
 
 // Methods
 Floor.prototype.init = function() {
-	// Check if the hole position is viable
+	// Check if the hole position is viable - Not sure if I want this functionallity or not gameplay wise
+	// TODO: Decide if the game should work like this
 	// this.checkHole();
+
 	// Fill the floor with tiles
 	this.fillFloor();
+	
 	// Setup the initial class properties
 	this.setup();
 
