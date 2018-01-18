@@ -1,7 +1,10 @@
 'use strict';
 
 function Game(options) {
-	PIXI.Application.call(this, options); // Call the super constructor
+	// Extend the PIXI.Application class
+	PIXI.Application.call(this, options);
+
+	// Properties
 	this.name = 'Acid Run';
 	this.options = options;
 	this.size = {
@@ -12,12 +15,12 @@ function Game(options) {
 	this.ticker = PIXI.ticker.shared;
 	this.assets = this.loader.resources;
 	this.floors = new PIXI.Container;
-	this.player = new Player(this.size, this.options.tileSize);
+	this.player = null;
 
 	this.load(); // Run this on creation
 }
 
-// Assign the prototype and constructor
+// Assign the prototype and constructor to the class
 Game.prototype = Object.create(PIXI.Application.prototype);
 Game.prototype.constructor = Game;
 
@@ -43,45 +46,47 @@ Game.prototype.init = function() {
 
 	// Setup pointerlock
 	canvas = document.getElementsByTagName('canvas')[0];
-
-	canvas.requestPointerLock = canvas.requestPointerLock ||
-	                            canvas.mozRequestPointerLock;
-
-	document.exitPointerLock = document.exitPointerLock ||
-	                           document.mozExitPointerLock;	
+	canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+	document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
 	// Resize the game to fit the browser width
 	this.fitToScreenWidth();
 
 	// Fill the screen with platforms
-	this.floors.y = game.screen.bottom - game.options.tileSize;
+	this.floors.y = game.screen.bottom - game.options.tileSize / 2;
 	this.stage.addChild(this.floors);
-	for (var i = 0; i < this.size.height / 2 + 1; i++) {
+
+	for (var i = 0; i < (this.size.height / 2 + 1); i++) {
 		var count = this.floors.children.length;
 		var floor = new Floor(count);
 	};
 
 	// Add the player
-	this.player.init();
+	this.player = new Player(this.extractPlayerAnimations());
 
-	if(mobileAndTabletcheck()) {
+	// Show the controls on touch devices
+	if (mobileAndTabletcheck()) {
 		document.getElementById('mobile-controls').style.display = 'block';
 	};
-
-	// Add the debug screen - REMOVE WHEN DONE
-	this.debug_text = new PIXI.Text('', {
-		fontFamily: 'Courier New',
-		fontSize: 16,
-		fill: 0xffffff,
-		align: 'right'
-	});
-	this.debug_text.x = game.screen.left + this.options.tileSize;
-	this.debug_text.anchor.set(1, 0);
-	this.stage.addChild(this.debug_text);
 
 	// Run the update loop
 	this.update(performance.now());
 };
+
+Game.prototype.extractPlayerAnimations = function() {
+	// Extract the iddle frames from the atlas
+	var animations = [];
+	var iddleFrames = Object.keys(game.assets['char_atlas'].textures).filter(function(key) {
+		return key.includes('Walk_001') || key.includes('Walk_002')
+	});
+
+	// Push the extracted frames to the iddle animations container
+	for (var i = 0; i < Object.keys(iddleFrames).length; i++) {
+		animations.push(PIXI.Texture.fromFrame(iddleFrames[i]));
+	};
+
+	return animations;
+}
 
 Game.prototype.fitToScreenWidth = function() {
 	this.renderer.view.style.position = "absolute";
@@ -91,33 +96,33 @@ Game.prototype.fitToScreenWidth = function() {
 };
 
 Game.prototype.requestLock = function(e) {
-  	if(e.type === 'touchend') {
-  		game.player.crosshair.x = e.changedTouches[0].clientX;
-  		game.player.crosshair.y = e.changedTouches[0].clientY;
-  		game.player.updateCrosshairTouch();
-  		game.player.shoot();  		
-  	} else {
+	if (e.type === 'touchend') {
+		game.player.crosshair.x = e.changedTouches[0].clientX;
+		game.player.crosshair.y = e.changedTouches[0].clientY;
+		game.player.updateCrosshairTouch();
+		game.player.shoot();
+	} else {
 		canvas.requestPointerLock();
-		if(document.pointerLockElement === canvas ||
-		  document.mozPointerLockElement === canvas) {
+
+		if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
 			game.player.shoot();
 		};
 	};
 };
 
 Game.prototype.lockChange = function() {
-  if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
-    document.addEventListener("mousemove", game.player.updateCrosshair, false);
-	game.ticker.start();
-  } else {
-    document.removeEventListener("mousemove", game.player.updateCrosshair, false);
-    
-    for(var key in game.player.keys) {
-		game.player.keys[key] = false;
-	};
+	if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
+		document.addEventListener("mousemove", game.player.updateCrosshair, false);
+		game.ticker.start();
+	} else {
+		document.removeEventListener("mousemove", game.player.updateCrosshair, false);
 
-    game.ticker.stop();
-  }
+		for (var key in game.player.keys) {
+			game.player.keys[key] = false;
+		};
+
+		game.ticker.stop();
+	}
 };
 
 Game.prototype.update = function(time) {
@@ -127,32 +132,9 @@ Game.prototype.update = function(time) {
 };
 
 Game.prototype.updateCamera = function() {
-	this.stage.pivot.y = this.player.position.y - 500;
-	// this.stage.pivot.x = this.player.position.x;
-	// this.stage.position.x = this.renderer.width/2;
-	// this.stage.position.y = this.renderer.height/2;
+	this.stage.pivot.y = this.player.position.y - 500; // TODO: Change the constant
 };
 
 Game.prototype.render = function() {
 	this.renderer.render(this.stage);
-
-	// Update the debug screen - REMOVE WHEN DONE
-	if(this.player && this.debug_text) {		
-		this.debug_text.text = `
-			------DEBUG------
-			__ PLAYER DATA __
-			\n\n
-			Floor: ${this.player.floor.current}
-			\n
-			[STATES]
-			Jumping: ${this.player.state.jumping}
-			Falling: ${this.player.state.falling}
-			\n
-			[COLLISIONS]
-			Top: ${this.player.collision.top === false ? false : true}
-			Bottom: ${this.player.collision.bottom === false ? false : true}
-			Left: ${this.player.collision.left === false ? false : true}
-			Right: ${this.player.collision.right === false ? false : true}
-		`;	
-	};
 };
