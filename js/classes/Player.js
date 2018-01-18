@@ -20,6 +20,7 @@ function Player(iddleAnimation) {
 	};
 	this.stats = {
 		speed: 20,
+		gravity: 10,
 		fireRate: 50
 	};
 	this.state = {
@@ -59,7 +60,7 @@ Player.prototype.init = function() {
 
 Player.prototype.setup = function() {
 	this.x = (game.size.width / 2 * game.options.tileSize) + (this.width / 2 * game.options.ratio) + game.size.margin / 2;
-	this.y = game.screen.bottom - game.options.tileSize - (this.height / 2 * game.options.ratio);
+	this.y = game.floors.y - (game.options.tileSize / 2 + this.height / 2);
 	this.scale.set(0.75 * game.options.ratio);
 	this.anchor.set(0.5 * game.options.ratio);
 
@@ -161,6 +162,16 @@ Player.prototype.update = function() {
 	// Check the collisions
 	this.collision = this.detectCollision();
 
+	if (this.collision.top) {
+		// If the player hits a tile above him stop jumping
+		this.state.jumping = false;
+	};
+
+	if (this.collision.bottom) {
+		// If the player hits a tile bellow him stop jumping
+		this.state.falling = false;
+	};
+
 	if (this.state.jumping) {
 		this.collision = this.detectCollision();
 		if (this.collision.top) {
@@ -172,15 +183,6 @@ Player.prototype.update = function() {
 		};
 	};
 
-	if (this.collision.top) {
-		// If the player hits a tile above him stop jumping
-		this.state.jumping = false;
-	};
-
-	if (this.collision.bottom) {
-		// If the player hits a tile bellow him stop jumping
-		this.state.falling = false;
-	};
 
 	// Update the bullets
 	this.updateBullets();
@@ -239,9 +241,7 @@ Player.prototype.jump = function() {
 Player.prototype.applyGravity = function() {
 	if (!this.state.jumping && !this.collision.bottom) {
 		this.state.falling = true;
-
-		this.collision = this.detectCollision();
-		this.y += this.stats.speed * 1.5 * game.options.ratio;
+		this.y += this.stats.gravity * game.options.ratio;// this.stats.speed;
 	};
 };
 
@@ -254,6 +254,60 @@ Player.prototype.shoot = function() {
 	}
 };
 
+Player.prototype.detectCollision = function() {
+	var collision = {
+		top: false,
+		bottom: false,
+		left: false,
+		right: false
+	};
+
+	for (var i = 0; i < game.floors.children.length; i++) {
+		var floor = game.floors.children[i];
+
+		for (var j = 0; j < floor.children.length; j++) {
+			var tile = floor.children[j];
+			var tileGlobalX = tile.getGlobalPosition().x + game.stage.pivot.x;
+			var tileGlobalY = tile.getGlobalPosition().y + game.stage.pivot.y;
+
+			if (this.intersect(tile)) {
+				if (this.y < tileGlobalY + tile.height / 2 &&
+					this.y > tileGlobalY - tile.height / 2
+				) {
+					if (this.x + this.width / 2 > tileGlobalX + this.width / 2) {
+						collision.left = tile;
+					};
+
+					if (this.x - this.width / 2 < tileGlobalX - this.width / 2) {
+						collision.right = tile;
+					};
+
+				} else {
+					if (tileGlobalY - tile.height / 2 < this.y) {
+						collision.top = tile;
+					} else if (tileGlobalY + tile.height / 2 > this.y) {
+						collision.bottom = tile;
+					};
+				};
+			};
+		};
+	};
+
+	return collision;
+};
+
+Player.prototype.intersect = function(sprite) {
+	var ab = this.getBounds();
+	var bb = sprite.getBounds();
+
+	if (ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + 5 + ab.height > bb.y && ab.y < bb.y + bb.height) { // TODO: Fix the godddamn constant
+		return true;
+	} else {
+		return false;
+	};
+};
+
+/*=== BULLETS ===*/
 Player.prototype.addBullet = function() {
 	var bullet = new PIXI.Sprite(
 		game.assets.bullet.texture
@@ -323,56 +377,4 @@ Player.prototype.updateBullets = function() {
 		};
 	};
 };
-
-Player.prototype.detectCollision = function() {
-	var collision = {
-		top: false,
-		bottom: false,
-		left: false,
-		right: false
-	};
-
-	for (var i = 0; i < game.floors.children.length; i++) {
-		var floor = game.floors.children[i];
-
-		for (var j = 0; j < floor.children.length; j++) {
-			var tile = floor.children[j];
-			var tileGlobalX = tile.getGlobalPosition().x + game.stage.pivot.x;
-			var tileGlobalY = tile.getGlobalPosition().y + game.stage.pivot.y;
-
-			if (this.intersect(tile)) {
-				if (this.y < tileGlobalY + tile.height / 2 &&
-					this.y > tileGlobalY - tile.height / 2
-				) {
-					if (this.x + this.width / 2 > tileGlobalX + this.width / 2) {
-						collision.left = tile;
-					};
-
-					if (this.x - this.width / 2 < tileGlobalX - this.width / 2) {
-						collision.right = tile;
-					};
-
-				} else {
-					if (tileGlobalY - tile.height / 2 < this.y) {
-						collision.top = tile;
-					} else if (tileGlobalY + tile.height / 2 > this.y) {
-						collision.bottom = tile;
-					};
-				};
-			};
-		};
-	};
-
-	return collision;
-};
-
-Player.prototype.intersect = function(sprite) {
-	var ab = this.getBounds();
-	var bb = sprite.getBounds();
-
-	if (ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + 5 + ab.height > bb.y && ab.y < bb.y + bb.height) { // TODO: Fix the godddamn constant
-		return true;
-	} else {
-		return false;
-	};
-}
+/*=== END BULLETS ===*/
