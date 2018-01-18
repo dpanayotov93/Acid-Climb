@@ -11,7 +11,7 @@ window.onload = function() {
 		autoResize: true,
 		resolution: 1,
 		screenOffset: 16 * ratio,
-		transparent: true,
+		// transparent: true,
 		roundPixels: true,
 		maxWidth: maxWidth,
 		ratio: ratio,

@@ -15,6 +15,7 @@ function Game(options) {
 	this.ticker = PIXI.ticker.shared;
 	this.assets = this.loader.resources;
 	this.floors = new PIXI.Container;
+	this.background = null;
 	this.player = null;
 
 	this.load(); // Run this on creation
@@ -27,6 +28,7 @@ Game.prototype.constructor = Game;
 // Methods
 Game.prototype.load = function() {
 	this.loader
+		.add('background', 'assets/backgrounds/hull_pattern.jpg')
 		.add('char_atlas', 'assets/sprites/atlas_hash.json')
 		.add('enemy_gorillabird', 'assets/sprites/enemy_gorillabird_cropped.json')
 		.add('enemy_flydemon', 'assets/sprites/enemy_flydemon.json')
@@ -43,6 +45,16 @@ Game.prototype.load = function() {
 Game.prototype.init = function() {
 	// Add the game view to the page	
 	document.body.appendChild(this.view);
+
+	// Add the background
+	this.addBackground();
+
+	// Make the stage interactive
+	this.stage.interactive = true;
+	this.stage
+		.on('mousedown', function() {
+			console.log('PIXI pointer DOWN');
+		});	
 
 	// Setup pointerlock
 	canvas = document.getElementsByTagName('canvas')[0];
@@ -71,6 +83,16 @@ Game.prototype.init = function() {
 
 	// Run the update loop
 	this.update(performance.now());
+};
+
+Game.prototype.addBackground = function() {
+	this.background = new PIXI.extras.TilingSprite(
+		game.assets['background'].texture,
+		window.innerWidth,
+		window.innerHeight,
+	);
+
+	this.stage.addChild(this.background);
 };
 
 Game.prototype.extractPlayerAnimations = function() {
@@ -132,9 +154,12 @@ Game.prototype.update = function(time) {
 };
 
 Game.prototype.updateCamera = function() {
-	this.stage.pivot.y = this.player.position.y - 500; // TODO: Change the constant
+	var startDelta = Math.floor((game.floors.y - (game.options.tileSize / 2 + game.player.height / 2)) / 2);
+	this.stage.pivot.y = this.player.y - startDelta;
+	this.background.y = this.stage.pivot.y;
 };
 
 Game.prototype.render = function() {
+	// Render the stage
 	this.renderer.render(this.stage);
 };

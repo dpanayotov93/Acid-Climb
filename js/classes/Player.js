@@ -76,7 +76,7 @@ Player.prototype.addEvents = function() {
 
 	document.addEventListener('pointerlockchange', game.lockChange, false);
 	document.addEventListener('mozpointerlockchange', game.lockChange, false);
-	canvas.addEventListener('mousedown', game.requestLock);
+	// canvas.addEventListener('mousedown', game.requestLock);
 
 	// Touch controls
 	if (mobileAndTabletcheck) {
