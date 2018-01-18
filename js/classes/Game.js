@@ -50,16 +50,7 @@ Game.prototype.init = function() {
 	this.addBackground();
 
 	// Make the stage interactive
-	this.stage.interactive = true;
-	this.stage
-		.on('mousedown', function() {
-			console.log('PIXI pointer DOWN');
-		});	
-
-	// Setup pointerlock
-	canvas = document.getElementsByTagName('canvas')[0];
-	canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-	document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+	this.addEvents();
 
 	// Resize the game to fit the browser width
 	this.fitToScreenWidth();
@@ -74,7 +65,7 @@ Game.prototype.init = function() {
 	};
 
 	// Add the player
-	this.player = new Player(this.extractPlayerAnimations());
+	this.player = new Player(this.getInitialPlayerAnimations());
 
 	// Show the controls on touch devices
 	if (mobileAndTabletcheck()) {
@@ -95,7 +86,16 @@ Game.prototype.addBackground = function() {
 	this.stage.addChild(this.background);
 };
 
-Game.prototype.extractPlayerAnimations = function() {
+Game.prototype.addEvents = function() {
+	this.stage.interactive = true;
+	this.stage
+		.on('pointerdown', function(e) {
+			var mouse = e.data.global;
+			game.player.shoot(mouse);
+		});
+};
+
+Game.prototype.getInitialPlayerAnimations = function() {
 	// Extract the iddle frames from the atlas
 	var animations = [];
 	var iddleFrames = Object.keys(game.assets['char_atlas'].textures).filter(function(key) {
@@ -115,36 +115,6 @@ Game.prototype.fitToScreenWidth = function() {
 	this.renderer.view.style.display = "block";
 	this.renderer.autoResize = true;
 	this.renderer.resize(window.innerWidth, window.innerHeight);
-};
-
-Game.prototype.requestLock = function(e) {
-	if (e.type === 'touchend') {
-		game.player.crosshair.x = e.changedTouches[0].clientX;
-		game.player.crosshair.y = e.changedTouches[0].clientY;
-		game.player.updateCrosshairTouch();
-		game.player.shoot();
-	} else {
-		canvas.requestPointerLock();
-
-		if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
-			game.player.shoot();
-		};
-	};
-};
-
-Game.prototype.lockChange = function() {
-	if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
-		document.addEventListener("mousemove", game.player.updateCrosshair, false);
-		game.ticker.start();
-	} else {
-		document.removeEventListener("mousemove", game.player.updateCrosshair, false);
-
-		for (var key in game.player.keys) {
-			game.player.keys[key] = false;
-		};
-
-		game.ticker.stop();
-	}
 };
 
 Game.prototype.update = function(time) {

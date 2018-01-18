@@ -74,16 +74,11 @@ Player.prototype.addEvents = function() {
 	document.addEventListener('keydown', this.onKeyDown.bind(this));
 	document.addEventListener('keyup', this.onKeyUp.bind(this));
 
-	document.addEventListener('pointerlockchange', game.lockChange, false);
-	document.addEventListener('mozpointerlockchange', game.lockChange, false);
-	// canvas.addEventListener('mousedown', game.requestLock);
 
-	// Touch controls
 	if (mobileAndTabletcheck) {
 		var moveIcon = document.getElementById('move');
 		var jumpIcon = document.getElementById('jump');
 
-		canvas.addEventListener('touchend', game.requestLock);
 		moveIcon.addEventListener('touchstart', function(e) {
 			game.player.directionTouch = e.target.clientWidth / 2 < e.changedTouches[0].clientX ? 1 : -1;
 			game.player.holdingTouch = true;
@@ -241,13 +236,13 @@ Player.prototype.jump = function() {
 Player.prototype.applyGravity = function() {
 	if (!this.state.jumping && !this.collision.bottom) {
 		this.state.falling = true;
-		this.y += this.stats.gravity * game.options.ratio;// this.stats.speed;
+		this.y += this.stats.gravity * game.options.ratio; // this.stats.speed;
 	};
 };
 
-Player.prototype.shoot = function() {
-	this.addBullet();
-	if (game.player.x > game.player.crosshair.x) {
+Player.prototype.shoot = function(mouse) {
+	this.addBullet(mouse);
+	if (game.player.x > mouse.x) {
 		game.player.scale.x = -0.75 * game.options.ratio;
 	} else {
 		game.player.scale.x = 0.75 * game.options.ratio;
@@ -308,7 +303,7 @@ Player.prototype.intersect = function(sprite) {
 };
 
 /*=== BULLETS ===*/
-Player.prototype.addBullet = function() {
+Player.prototype.addBullet = function(mouse) {
 	var bullet = new PIXI.Sprite(
 		game.assets.bullet.texture
 	); // TODO: Create Bullet class
@@ -322,7 +317,7 @@ Player.prototype.addBullet = function() {
 	};
 
 	bullet.scale.set(0.5 * game.options.ratio);
-	bullet.rotation = this.rotateBullet(this.crosshair.x, this.crosshair.y, bullet.x, bullet.y);
+	bullet.rotation = this.rotateBullet(mouse.x, mouse.y, bullet.x, bullet.y);
 	this.bullets.push(bullet);
 	game.stage.addChild(bullet);
 };
