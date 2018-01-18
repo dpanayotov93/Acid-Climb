@@ -33,7 +33,6 @@ function Player(iddleAnimation) {
 		height: 250
 	};
 	this.bullets = [];
-	this.crosshair = null;
 	this.holdingTouch = false;
 
 	this.init(); // Run this on creation
@@ -47,9 +46,6 @@ Player.prototype.constructor = Player;
 Player.prototype.init = function() {
 	// Setup the initial class properties
 	this.setup();
-
-	// Add the crosshair
-	this.addCrosshair();
 
 	// Setup the class events
 	this.addEvents();
@@ -98,44 +94,6 @@ Player.prototype.addEvents = function() {
 	};
 };
 
-Player.prototype.addCrosshair = function() {
-	this.crosshair = new PIXI.Sprite(
-		game.assets.crosshair.texture
-	);
-	this.crosshair.scale.set(0.25 * game.options.ratio);
-	this.crosshair.anchor.set(0.25 * game.options.ratio);
-	this.crosshair.x = game.screen.width / 2 - this.crosshair.width / 2;
-	this.crosshair.y = game.screen.height / 2 - this.crosshair.height / 2;
-
-	if (mobileAndTabletcheck()) {
-		this.crosshair.visible = false;
-	};
-
-	game.stage.addChild(this.crosshair);
-};
-
-Player.prototype.updateCrosshair = function(e) {
-	var x = e.movementX;
-	var y = e.movementY;
-
-	game.player.crosshair.x += x;
-	game.player.crosshair.y += y;
-
-	if (game.player.x > game.player.crosshair.x) {
-		game.player.scale.x = -0.75 * game.options.ratio;
-	} else {
-		game.player.scale.x = 0.75 * game.options.ratio;
-	}
-};
-
-Player.prototype.updateCrosshairTouch = function() {
-	if (this.x > this.crosshair.x) {
-		this.scale.x = -0.75 * game.options.ratio;
-	} else {
-		this.scale.x = 0.75 * game.options.ratio;
-	}
-};
-
 Player.prototype.onKeyUp = function(e) {
 	// Unregister the key
 	this.keys[e.code] = false;
@@ -148,11 +106,7 @@ Player.prototype.onKeyDown = function(e) {
 
 Player.prototype.update = function() {
 	// Update the camera
-	if (game.screen.height / 2 <= game.screen.height - this.y) {
-		game.updateCamera();
-	} else {
-		game.stage.pivot.y = 0;
-	};
+	game.updateCamera();
 
 	// Check the collisions
 	this.collision = this.detectCollision();

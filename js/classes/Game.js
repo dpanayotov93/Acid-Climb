@@ -15,6 +15,7 @@ function Game(options) {
 	this.ticker = PIXI.ticker.shared;
 	this.assets = this.loader.resources;
 	this.floors = new PIXI.Container;
+	this.cursor = new PIXI.Sprite();
 	this.background = null;
 	this.player = null;
 
@@ -72,6 +73,9 @@ Game.prototype.init = function() {
 		document.getElementById('mobile-controls').style.display = 'block';
 	};
 
+	// Add the cursor on top of everything
+	this.stage.addChild(this.cursor);
+
 	// Run the update loop
 	this.update(performance.now());
 };
@@ -88,11 +92,33 @@ Game.prototype.addBackground = function() {
 
 Game.prototype.addEvents = function() {
 	this.stage.interactive = true;
-	this.stage
-		.on('pointerdown', function(e) {
-			var mouse = e.data.global;
-			game.player.shoot(mouse);
-		});
+
+	this.cursor.anchor.set(0.5);
+	this.cursor.scale.set(0.125 * this.options.ratio);
+
+	this.renderer.plugins.interaction.cursorStyles["crosshair_blue"] = function(mode) {
+		game.cursor.texture = game.assets['crosshair'].texture;
+	};
+	this.renderer.plugins.interaction.on("pointerover", () => {
+	    //mouse is now on stage
+	    game.cursor.visible = true;
+	});
+	this.renderer.plugins.interaction.on("pointerout", () => {
+	    //mouse left stage
+	    game.cursor.visible = false;
+	});
+	this.renderer.plugins.interaction.on("pointermove", (event) => {
+	    //update cursor position on each move
+	    game.cursor.x = event.data.global.x;
+	    game.cursor.y = event.data.global.y + game.stage.pivot.y;
+	});
+
+	this.stage.cursor = 'crosshair_blue';
+	this.stage.on('pointerdown', function(e) {
+		var mouse = e.data.global;
+		mouse.y += game.stage.pivot.y;
+		game.player.shoot(mouse);
+	});	
 };
 
 Game.prototype.getInitialPlayerAnimations = function() {
@@ -125,8 +151,11 @@ Game.prototype.update = function(time) {
 
 Game.prototype.updateCamera = function() {
 	var startDelta = Math.floor((game.floors.y - (game.options.tileSize / 2 + game.player.height / 2)) / 2);
-	this.stage.pivot.y = this.player.y - startDelta;
-	this.background.y = this.stage.pivot.y;
+
+	if(this.player.y < this.screen.bottom - this.stage.height / 2) {
+		this.stage.pivot.y = this.player.y - startDelta;
+		this.background.y = this.stage.pivot.y;
+	};
 };
 
 Game.prototype.render = function() {
