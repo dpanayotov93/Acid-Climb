@@ -134,7 +134,7 @@ Game.prototype.getInitialPlayerAnimations = function() {
 	};
 
 	return animations;
-}
+};
 
 Game.prototype.fitToScreenWidth = function() {
 	this.renderer.view.style.position = "absolute";
