@@ -57,6 +57,9 @@ Game.prototype.init = function() {
 	// Resize the game to fit the browser width
 	this.fitToScreenWidth();
 
+	// Initialize the enemy factory
+	this.enemyFactory = new Factory('ENEMY');
+
 	// Fill the screen with platforms
 	this.floors.y = game.screen.bottom - game.options.tileSize / 2;
 	this.stage.addChild(this.floors);

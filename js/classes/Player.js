@@ -300,8 +300,9 @@ Player.prototype.updateBullets = function() {
 
 			for (var k = 0; k < floor.children.length; k++) {
 				var tile = floor.children[k];
+				var tileTexture = tile.texture.baseTexture.textureCacheIds[0];
 
-				if (intersect(bullet, tile)) {
+				if (intersect(bullet, tile) && tileTexture !== 'beam') {
 					bullet.destroy();
 					this.bullets.splice(i, 1);
 					break loop;

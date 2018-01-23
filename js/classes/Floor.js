@@ -11,7 +11,10 @@ function Floor(n) {
 	}; // TODO: Create a hole class (Either that or just a door class)
 	this.texture = this.n > 0 ? 'Tile_005' : 'Tile_002';
 	this.enemies = new PIXI.Container();
-	this.spawns = [];
+	this.spawns = {
+		left: null,
+		right: null
+	};
 
 	this.init(); // Run this on creation
 };
@@ -45,8 +48,8 @@ Floor.prototype.setEnemySpawns = function() {
 	var spawnA = rnd(0, this.hole.position);
 	var spawnB = rnd(this.hole.position + 1, game.size.width - 1);
 
-	this.spawns.push(spawnA);
-	this.spawns.push(spawnB);
+	this.spawns.left =spawnA;
+	this.spawns.right = spawnB;
 };
 
 Floor.prototype.checkHole = function() {
@@ -57,6 +60,7 @@ Floor.prototype.checkHole = function() {
 };
 
 Floor.prototype.fillFloor = function() {
+	var enemy;
 	// Fill the floor with tiles till it cover the game width
 	for (var i = 0; i < game.size.width; i++) {
 		// Add a tile unless it's the hole positions in which case add a door on top of that hole
@@ -68,12 +72,16 @@ Floor.prototype.fillFloor = function() {
 			this.addBeam();
 		};
 
-		if(i === this.spawns[0]) {
-			//game.enemyFactory.spawn(this.spawns[0]); // TODO: Create the enemy factory
-		} else if(i === this.spawns[1]) {
-			//game.enemyFactory.spawn(this.spawns[1]); // TODO: Create the enemy factory
+		if(i === this.spawns.left) {
+			enemy = game.enemyFactory.spawn({x: this.spawns.left});
+		} else if(i === this.spawns.right) {
+			enemy = game.enemyFactory.spawn({x: this.spawns.right});
 		};
-	};	
+
+		if(enemy) {
+			this.enemies.addChild(enemy);
+		};
+	};
 };
 
 Floor.prototype.addTile = function(x) {
