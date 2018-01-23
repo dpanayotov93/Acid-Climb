@@ -9,6 +9,8 @@ function Floor(n) {
 		door: null
 	}; // TODO: Create a hole class (Either that or just a door class)
 	this.texture = this.n > 0 ? 'Tile_005' : 'Tile_002';
+	this.enemies = new PIXI.Container();
+	this.spawns = [];
 
 	this.init(); // Run this on creation
 };
@@ -22,6 +24,11 @@ Floor.prototype.init = function() {
 	// Check if the hole position is viable - Not sure if I want this functionallity or not gameplay wise
 	// TODO: Decide if the game should work like this
 	// this.checkHole();
+	
+	// Set the spawn positions for the enemies on the floor
+	if(this.n > 0) {
+		this.setEnemySpawns();		
+	};
 
 	// Fill the floor with tiles
 	this.fillFloor();
@@ -31,6 +38,14 @@ Floor.prototype.init = function() {
 
 	// Add the floor to the floors container
 	game.floors.addChild(this);
+};
+
+Floor.prototype.setEnemySpawns = function() {
+	var spawnA = rnd(0, this.hole.position);
+	var spawnB = rnd(this.hole.position + 1, game.size.width - 1);
+
+	this.spawns.push(spawnA);
+	this.spawns.push(spawnB);
 };
 
 Floor.prototype.checkHole = function() {
@@ -45,9 +60,15 @@ Floor.prototype.fillFloor = function() {
 	for (var i = 0; i < game.size.width; i++) {
 		// Add a tile unless it's the hole positions in which case add a door on top of that hole
 		if (i !== this.hole.position) {
-			this.addTile(i * game.options.tileSize);
+			this.addTile(i * game.options.tileSize);			
 		} else if(this.n > 1) {
 			this.addDoor();
+		};
+
+		if(i === this.spawns[0]) {
+			//game.enemyFactory.spawn(this.spawns[0]); // TODO: Create the enemy factory
+		} else if(i === this.spawns[1]) {
+			//game.enemyFactory.spawn(this.spawns[1]); // TODO: Create the enemy factory
 		};
 	};	
 };

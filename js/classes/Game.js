@@ -31,9 +31,9 @@ Game.prototype.load = function() {
 	this.loader
 		.add('background', 'assets/backgrounds/hull_pattern.jpg')
 		.add('char_atlas', 'assets/sprites/atlas_hash.json')
-		.add('enemy_gorillabird', 'assets/sprites/enemy_gorillabird_cropped.json')
-		.add('enemy_flydemon', 'assets/sprites/enemy_flydemon.json')
-		.add('enemy_mushdick', 'assets/sprites/enemy_mushdick.json')
+		.add('gorillabird', 'assets/sprites/enemies/gorillabird.json')
+		.add('flydemon', 'assets/sprites/enemies/flydemon.json')
+		.add('mushdick', 'assets/sprites/enemies/mushdick.json')
 		.add('tiles_atlas', 'assets/tiles/atlas_hash.json')
 		.add('objects_atlas', 'assets/objects/atlas_hash.json')
 		.add('crosshair', 'assets/objects/crosshair.png')
@@ -124,9 +124,11 @@ Game.prototype.addEvents = function() {
 Game.prototype.getInitialPlayerAnimations = function() {
 	// Extract the iddle frames from the atlas
 	var animations = [];
-	var iddleFrames = Object.keys(game.assets['char_atlas'].textures).filter(function(key) {
-		return key.includes('Walk_001') || key.includes('Walk_002')
-	});
+	var iddleFrames = Object.keys(game.assets['char_atlas'].textures)
+		.filter(function(key) {
+			return key.includes('Walk_001') || key.includes('Walk_002') || key.includes('Walk_003')
+		});
+	console.log(iddleFrames)
 
 	// Push the extracted frames to the iddle animations container
 	for (var i = 0; i < Object.keys(iddleFrames).length; i++) {

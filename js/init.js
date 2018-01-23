@@ -28,3 +28,7 @@ window.mobileAndTabletcheck = function() {
 	})(navigator.userAgent || navigator.vendor || window.opera);
 	return check;
 };
+
+window.rnd = function(min, max) {
+  return Math.floor(min + Math.random()*(max+1 - min))
+};

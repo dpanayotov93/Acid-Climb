@@ -62,7 +62,7 @@ Player.prototype.setup = function() {
 
 	this.animationSpeed = .15;
 	this.jumpData.height = game.options.tileSize * 2 * game.options.ratio;
-
+	this.onFrameChange = this.test;
 	this.play();
 };
 
