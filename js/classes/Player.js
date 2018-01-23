@@ -218,8 +218,9 @@ Player.prototype.detectCollision = function() {
 			var tile = floor.children[j];
 			var tileGlobalX = tile.getGlobalPosition().x + game.stage.pivot.x;
 			var tileGlobalY = tile.getGlobalPosition().y + game.stage.pivot.y;
-
-			if (this.intersect(tile)) {
+			var tileTexture = tile.texture.baseTexture.textureCacheIds[0];
+			
+			if (this.intersect(tile) && tileTexture !== 'beam') {
 				if (this.y < tileGlobalY + tile.height / 2 &&
 					this.y > tileGlobalY - tile.height / 2
 				) {

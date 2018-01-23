@@ -6,7 +6,8 @@ function Floor(n) {
 	this.n = n || 0;
 	this.hole = {
 		position: this.n > 0 ? Math.floor(Math.random() * (game.size.width - 3)) + 1 : null,
-		door: null
+		door: null,
+		beam: null
 	}; // TODO: Create a hole class (Either that or just a door class)
 	this.texture = this.n > 0 ? 'Tile_005' : 'Tile_002';
 	this.enemies = new PIXI.Container();
@@ -63,6 +64,8 @@ Floor.prototype.fillFloor = function() {
 			this.addTile(i * game.options.tileSize);			
 		} else if(this.n > 1) {
 			this.addDoor();
+		} else {
+			this.addBeam();
 		};
 
 		if(i === this.spawns[0]) {
@@ -90,7 +93,7 @@ Floor.prototype.addTile = function(x) {
 Floor.prototype.addDoor = function() {
 	this.hole.door = new PIXI.Sprite(
 		game.assets['objects_atlas'].textures['Box_001']
-	); // TODO: Create a Door class (Either that or just a hole class - It would most likely be door as it's has a sprite)
+	); // TODO: Create a Door class (Either that or just a hole class)
 
 	this.hole.door.x = (this.hole.position * game.options.tileSize) + (this.hole.door.width / 1.325 * game.options.ratio);
 	this.hole.door.scale.set(game.options.ratio);
@@ -98,4 +101,17 @@ Floor.prototype.addDoor = function() {
 
 	// Add the door to the floor
 	this.addChild(this.hole.door);
+};
+
+Floor.prototype.addBeam = function() {
+	this.hole.beam = new PIXI.Sprite(
+		game.assets['beam'].texture
+	); // TODO: MAYBE Create a Beam class (Either that or just a hole class)
+
+	this.hole.beam.x = (this.hole.position * game.options.tileSize) + (this.hole.beam.width / 1.325 * game.options.ratio);
+	this.hole.beam.scale.set(game.options.ratio);
+	this.hole.beam.anchor.set(.5, .25 * game.options.ratio);	
+
+	// Add the beam to the floor
+	this.addChild(this.hole.beam);	
 };

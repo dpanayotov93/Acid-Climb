@@ -36,6 +36,7 @@ Game.prototype.load = function() {
 		.add('mushdick', 'assets/sprites/enemies/mushdick.json')
 		.add('tiles_atlas', 'assets/tiles/atlas_hash.json')
 		.add('objects_atlas', 'assets/objects/atlas_hash.json')
+		.add('beam', 'assets/objects/portal_beam.png')
 		.add('crosshair', 'assets/objects/crosshair.png')
 		.add('bullet', 'assets/objects/bullet.png')
 		.load(function() {
