@@ -42,7 +42,7 @@ Floor.prototype.init = function() {
 
 	// Add the enemies to the floor
 	this.enemies.noCollision = true;
-	this.enemies.y -= game.options.tileSize;
+	this.enemies.y -= game.options.tileSize / 2;
 	this.addChild(this.enemies);
 
 	// Add the floor to the floors container

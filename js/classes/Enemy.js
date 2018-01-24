@@ -10,6 +10,9 @@ function Enemy(x, direction, margin, iddleAnimation) {
 	this.animations = {
 		iddle: iddleAnimation
 	};
+	this.stats = {
+		health: 100
+	};
 
 	this.init();
 };
@@ -23,8 +26,8 @@ Enemy.prototype.init = function() {
 	this.x = (this.tileX * game.options.tileSize) + game.options.tileSize / 2 + game.size.margin;
 	// this.y -= game.options.tileSize - (this.height / 2 * game.options.ratio) + game.size.margin;
 	this.y += this.margin * game.options.ratio;
-	this.scale.set(game.options.ratio  * this.direction, game.options.ratio);
-	this.anchor.set(0.5 * game.options.ratio);
+	this.scale.set(game.options.ratio  * this.direction,game.options.ratio);
+	this.anchor.set(0.5 * game.options.ratio);//0.25 * game.options.ratio);
 	this.animationSpeed = .15;
 	this.play();
 

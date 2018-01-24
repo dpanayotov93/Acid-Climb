@@ -19,6 +19,8 @@ function Player(iddleAnimation) {
 		max: 0
 	};
 	this.stats = {
+		health: 100,
+		damage: 20,
 		speed: 20,
 		gravity: 10,
 		fireRate: 50

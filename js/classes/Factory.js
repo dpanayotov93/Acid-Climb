@@ -2,7 +2,7 @@
 
 function Factory(type) {
 	this.TYPES = {ENEMY: 'ENEMY', ITEM: 'ITEM'};
-	this.enemies = ['gorillabird', 'flydemon', 'mushdick', 'dynorider', 'dynorider2'];
+	this.enemies = ['gorillabird', 'flydemon', 'dynorider', 'dynorider2'];
 	this.margins = [25, 0, 30, 0, 0];
 	this.type = type;
 };
@@ -20,12 +20,11 @@ Factory.prototype.spawn = function() {
 };
 
 Factory.prototype.spawnEnemy = function(x, direction) {
-	// Extract the iddle frames from the atlas
 	var enemyTypeId = rnd(0, this.enemies.length -1 );
 	var enemyType = this.enemies[enemyTypeId];
 	var margin = this.margins[enemyTypeId];
-	var animations = [];
 	var frames = Object.keys(game.assets[enemyType].textures);
+	var animations = [];
 
 	// Push the extracted frames to the iddle animations container
 	for (var i = 0; i < Object.keys(frames).length; i++) {
