@@ -34,6 +34,8 @@ Game.prototype.load = function() {
 		.add('gorillabird', 'assets/sprites/enemies/gorillabird.json')
 		.add('flydemon', 'assets/sprites/enemies/flydemon.json')
 		.add('mushdick', 'assets/sprites/enemies/mushdick.json')
+		.add('dynorider', 'assets/sprites/enemies/dynorider.json')
+		.add('dynorider2', 'assets/sprites/enemies/dynorider2.json')
 		.add('tiles_atlas', 'assets/tiles/atlas_hash.json')
 		.add('objects_atlas', 'assets/objects/atlas_hash.json')
 		.add('beam', 'assets/objects/portal_beam.png')

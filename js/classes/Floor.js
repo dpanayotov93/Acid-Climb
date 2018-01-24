@@ -40,15 +40,20 @@ Floor.prototype.init = function() {
 	// Position the current floor two tile spaces above the previous flor / the ground
 	this.y = -this.n * game.options.tileSize * 2;
 
+	// Add the enemies to the floor
+	this.enemies.noCollision = true;
+	this.enemies.y -= game.options.tileSize;
+	this.addChild(this.enemies);
+
 	// Add the floor to the floors container
 	game.floors.addChild(this);
 };
 
 Floor.prototype.setEnemySpawns = function() {
-	var spawnA = rnd(0, this.hole.position);
+	var spawnA = rnd(0, this.hole.position - 1);
 	var spawnB = rnd(this.hole.position + 1, game.size.width - 1);
 
-	this.spawns.left =spawnA;
+	this.spawns.left = spawnA;
 	this.spawns.right = spawnB;
 };
 
@@ -60,7 +65,6 @@ Floor.prototype.checkHole = function() {
 };
 
 Floor.prototype.fillFloor = function() {
-	var enemy;
 	// Fill the floor with tiles till it cover the game width
 	for (var i = 0; i < game.size.width; i++) {
 		// Add a tile unless it's the hole positions in which case add a door on top of that hole
@@ -73,12 +77,10 @@ Floor.prototype.fillFloor = function() {
 		};
 
 		if(i === this.spawns.left) {
-			enemy = game.enemyFactory.spawn({x: this.spawns.left});
+			var enemy = game.enemyFactory.spawn({x: this.spawns.left, direction: -1});
+			this.enemies.addChild(enemy);
 		} else if(i === this.spawns.right) {
-			enemy = game.enemyFactory.spawn({x: this.spawns.right});
-		};
-
-		if(enemy) {
+			var enemy = game.enemyFactory.spawn({x: this.spawns.right, direction: 1});
 			this.enemies.addChild(enemy);
 		};
 	};

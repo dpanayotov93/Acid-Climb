@@ -218,9 +218,13 @@ Player.prototype.detectCollision = function() {
 			var tile = floor.children[j];
 			var tileGlobalX = tile.getGlobalPosition().x + game.stage.pivot.x;
 			var tileGlobalY = tile.getGlobalPosition().y + game.stage.pivot.y;
-			var tileTexture = tile.texture.baseTexture.textureCacheIds[0];
+			var tileTexture;
+
+			if(tile.texture) {
+				tileTexture = tile.texture.baseTexture.textureCacheIds[0];
+			};
 			
-			if (this.intersect(tile) && tileTexture !== 'beam') {
+			if (this.intersect(tile) && tileTexture !== 'beam' && !tile.noCollision) {
 				if (this.y < tileGlobalY + tile.height / 2 &&
 					this.y > tileGlobalY - tile.height / 2
 				) {
@@ -300,9 +304,13 @@ Player.prototype.updateBullets = function() {
 
 			for (var k = 0; k < floor.children.length; k++) {
 				var tile = floor.children[k];
-				var tileTexture = tile.texture.baseTexture.textureCacheIds[0];
+				var tileTexture;
 
-				if (intersect(bullet, tile) && tileTexture !== 'beam') {
+				if(tile.texture) {
+					tileTexture = tile.texture.baseTexture.textureCacheIds[0];
+				};
+
+				if (intersect(bullet, tile) && tileTexture !== 'beam' && !tile.noCollision) {
 					bullet.destroy();
 					this.bullets.splice(i, 1);
 					break loop;
