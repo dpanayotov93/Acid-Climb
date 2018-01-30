@@ -18,6 +18,7 @@ function Enemy(x, direction, margin, iddleAnimation) {
 		gravity: 10,
 		fireRate: 30
 	};
+	this.healthbar = new PIXI.Graphics();
 
 	this.init();
 };
@@ -41,9 +42,22 @@ Enemy.prototype.init = function() {
 	this.animationSpeed = .15;
 	this.play();
 
+	this.addHealthbar();
+
 	return this;
 };
 
 Enemy.prototype.updater = function() {
-	
+	this.healthbar.scale.x = this.stats.health / 100;
+	if(this.stats.health <= 0) {
+		this.destroy();
+	};	
+};
+
+Enemy.prototype.addHealthbar = function() {	
+	this.healthbar.beginFill(0xFF0000);
+	this.healthbar.lineStyle(1, 0xFFFF00);
+	this.healthbar.drawRect(-this.width / 2, -this.height / 2 - 50, this.width, 10);
+
+	this.addChild(this.healthbar);	
 };
