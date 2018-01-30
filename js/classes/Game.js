@@ -154,14 +154,15 @@ Game.prototype.fitToScreenWidth = function() {
 Game.prototype.update = function(time) {
 	if(this.floors) {
 		for(var i = 0; i < this.floors.children.length; i++) {
-			this.ticker.add(this.floors.children[i].update.bind(this.floors.children[i]));
+			var floor = this.floors.children[i];
+			this.ticker.add(floor.update.bind(floor));
 		};
 	};
 	
 	if(this.player) {
 		this.ticker.add(this.player.updater.bind(this.player));
 	};
-	
+
 	this.ticker.update(time);
 	this.render();
 };

@@ -7,7 +7,8 @@ function Floor(n) {
 	this.hole = {
 		position: this.n > 0 ? Math.floor(Math.random() * (game.size.width - 3)) + 1 : null,
 		door: null,
-		beam: null
+		beam: null,
+		openned: false
 	}; // TODO: Create a hole class (Either that or just a door class)
 	this.texture = this.n > 0 ? 'Tile_005' : 'Tile_002';
 	this.enemies = new PIXI.Container();
@@ -52,7 +53,15 @@ Floor.prototype.init = function() {
 Floor.prototype.update = function() {
 	for(var i = 0; i < this.enemies.children.length; i++) {
 		this.enemies.children[i].updater();
-	};	
+	};
+
+	if(this.hole.door) {
+		if(game.floors.children[this.n - 1].enemies.children.length === 0 && !this.hole.openned) {
+			this.hole.door.destroy();
+			this.addBeam();
+			this.hole.openned = true;
+		};
+	};
 }
 
 Floor.prototype.setEnemySpawns = function() {
