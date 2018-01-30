@@ -52,6 +52,7 @@ Player.prototype.init = function() {
 	// Setup the class events
 	this.addEvents();
 
+	game.ticker.add(this.updater.bind(this));
 	// Add the player to the stage
 	game.stage.addChild(this);
 };
@@ -314,7 +315,6 @@ Player.prototype.updateBullets = function() {
 					if (intersect(bullet, enemy)) {
 						bullet.destroy();
 						this.bullets.splice(i, 1);
-						console.log(this.stats.damage);
 						enemy.damage(this.stats.damage);
 						break loop;
 					};					

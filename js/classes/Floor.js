@@ -46,19 +46,28 @@ Floor.prototype.init = function() {
 	this.enemies.y -= game.options.tileSize / 2 * game.options.ratio;
 	this.addChild(this.enemies);
 
+	game.ticker.add(this.update.bind(this));
+
 	// Add the floor to the floors container
 	game.floors.addChild(this);
 };
 
 Floor.prototype.update = function() {
+	var self = this;
+	var num = this.n - 1;
+
 	for(var i = 0; i < this.enemies.children.length; i++) {
 		this.enemies.children[i].updater();
 	};
 
-	if(this.hole.door) {
-		if(game.floors.children[this.n - 1].enemies.children.length === 0 && !this.hole.openned) {
+	if(this.hole && num > 0 && !this.hole.openned) {
+		var enemiesCount = this.parent.children[num].enemies.children.length;
+		if(enemiesCount === 0) {
+			var n = this.parent.children.length;
+
 			this.hole.door.destroy();
 			this.addBeam();
+			new Floor(n);			
 			this.hole.openned = true;
 		};
 	};

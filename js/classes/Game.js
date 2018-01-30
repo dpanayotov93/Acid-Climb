@@ -67,8 +67,8 @@ Game.prototype.init = function() {
 	this.stage.addChild(this.floors);
 
 	for (var i = 0; i < (this.size.height / 2 + 1); i++) {
-		var count = this.floors.children.length;
-		var floor = new Floor(count);
+		var n = this.floors.children.length;
+		new Floor(n);
 	};
 
 	// Add the player
@@ -152,17 +152,6 @@ Game.prototype.fitToScreenWidth = function() {
 };
 
 Game.prototype.update = function(time) {
-	if(this.floors) {
-		for(var i = 0; i < this.floors.children.length; i++) {
-			var floor = this.floors.children[i];
-			this.ticker.add(floor.update.bind(floor));
-		};
-	};
-	
-	if(this.player) {
-		this.ticker.add(this.player.updater.bind(this.player));
-	};
-
 	this.ticker.update(time);
 	this.render();
 };
