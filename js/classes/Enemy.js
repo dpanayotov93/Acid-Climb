@@ -45,5 +45,5 @@ Enemy.prototype.init = function() {
 };
 
 Enemy.prototype.updater = function() {
-
+	
 };

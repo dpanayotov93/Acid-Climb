@@ -49,6 +49,12 @@ Floor.prototype.init = function() {
 	game.floors.addChild(this);
 };
 
+Floor.prototype.update = function() {
+	for(var i = 0; i < this.enemies.children.length; i++) {
+		this.enemies.children[i].updater();
+	};	
+}
+
 Floor.prototype.setEnemySpawns = function() {
 	var spawnA = rnd(0, this.hole.position - 1);
 	var spawnB = rnd(this.hole.position + 1, game.size.width - 1);

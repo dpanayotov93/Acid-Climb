@@ -152,20 +152,17 @@ Game.prototype.fitToScreenWidth = function() {
 };
 
 Game.prototype.update = function(time) {
-	this.ticker.update(time);
-	this.player.update();
-
 	if(this.floors) {
 		for(var i = 0; i < this.floors.children.length; i++) {
-			var floor = this.floors.children[i];
-
-			for(var j = 0; j < floor.enemies.children.length; j++) {
-				var enemy = floor.enemies.children[j];
-				enemy.updater();
-			};
+			this.ticker.add(this.floors.children[i].update.bind(this.floors.children[i]));
 		};
 	};
-
+	
+	if(this.player) {
+		this.ticker.add(this.player.updater.bind(this.player));
+	};
+	
+	this.ticker.update(time);
 	this.render();
 };
 

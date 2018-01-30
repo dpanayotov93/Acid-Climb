@@ -106,7 +106,7 @@ Player.prototype.onKeyDown = function(e) {
 	this.keys[e.code] = true;
 };
 
-Player.prototype.update = function() {
+Player.prototype.updater = function() {
 	// Update the camera
 	game.updateCamera();
 
