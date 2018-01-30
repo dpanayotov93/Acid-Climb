@@ -3,7 +3,7 @@
 function Factory(type) {
 	this.TYPES = {ENEMY: 'ENEMY', ITEM: 'ITEM'};
 	this.enemies = ['gorillabird', 'flydemon', 'dynorider', 'dynorider2'];
-	this.margins = [25, 0, 30, 0, 0];
+	this.margins = [10, -50, -5, 0];
 	this.type = type;
 };
 

@@ -78,9 +78,11 @@ Floor.prototype.fillFloor = function() {
 
 		if(i === this.spawns.left) {
 			var enemy = game.enemyFactory.spawn({x: this.spawns.left, direction: -1});
+			enemy.floor = this;
 			this.enemies.addChild(enemy);
 		} else if(i === this.spawns.right) {
 			var enemy = game.enemyFactory.spawn({x: this.spawns.right, direction: 1});
+			enemy.floor = this;
 			this.enemies.addChild(enemy);
 		};
 	};
