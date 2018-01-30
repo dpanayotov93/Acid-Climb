@@ -307,6 +307,18 @@ Player.prototype.updateBullets = function() {
 			for (var k = 0; k < floor.children.length; k++) {
 				var tile = floor.children[k];
 				var tileTexture;
+				var enemies = floor.enemies.children;
+
+				for(var l = 0; l < enemies.length; l++) {
+					var enemy = enemies[l];
+					if (intersect(bullet, enemy)) {
+						bullet.destroy();
+						this.bullets.splice(i, 1);
+						console.log(this.stats.damage);
+						enemy.damage(this.stats.damage);
+						break loop;
+					};					
+				};
 
 				if(tile.texture) {
 					tileTexture = tile.texture.baseTexture.textureCacheIds[0];

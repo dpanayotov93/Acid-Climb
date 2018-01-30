@@ -61,3 +61,7 @@ Enemy.prototype.addHealthbar = function() {
 
 	this.addChild(this.healthbar);	
 };
+
+Enemy.prototype.damage = function(value) {	
+	this.stats.health -= value;
+};
