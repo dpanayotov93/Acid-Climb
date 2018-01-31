@@ -14,10 +14,7 @@ function Player(iddleAnimation) {
 	};
 	this.keys = {};
 	this.collision = {};
-	this.floor = {
-		current: 0,
-		max: 0
-	};
+	this.floor = 1;
 	this.stats = {
 		health: 100,
 		damage: 20,
@@ -36,6 +33,10 @@ function Player(iddleAnimation) {
 	};
 	this.bullets = [];
 	this.holdingTouch = false;
+	this.score = { 
+		graphic: new PIXI.Graphics(),
+		text: ''
+	};
 
 	this.init(); // Run this on creation
 };
@@ -51,6 +52,9 @@ Player.prototype.init = function() {
 
 	// Setup the class events
 	this.addEvents();
+
+	// Add the score graphic
+	this.addScore();	
 
 	game.ticker.add(this.updater.bind(this));
 	// Add the player to the stage
@@ -97,6 +101,20 @@ Player.prototype.addEvents = function() {
 	};
 };
 
+Player.prototype.addScore = function() {
+	this.score.text = new PIXI.Text('Score: ' + this.floor, {fontFamily : 'Arial', fontSize: 24, fill : 'white', align : 'center'});
+	this.score.text.anchor.set(0.5, -0.5);
+	
+	this.score.graphic.beginFill(0x0000AA);
+	this.score.graphic.drawRect(-100, 0, 200, 50);
+	this.score.graphic.endFill();
+	this.score.graphic.alpha = 0.85;
+	this.score.graphic.addChild(this.score.text);
+	this.score.graphic.position.set(game.screen.width / 2, game.stage.pivot.y + 10);
+
+	game.stage.addChild(this.score.graphic);
+};
+
 Player.prototype.onKeyUp = function(e) {
 	// Unregister the key
 	this.keys[e.code] = false;
@@ -110,6 +128,9 @@ Player.prototype.onKeyDown = function(e) {
 Player.prototype.updater = function() {
 	// Update the camera
 	game.updateCamera();
+
+	// Update the score
+	this.updateScore();
 
 	// Check the collisions
 	this.collision = this.detectCollision();
@@ -262,6 +283,12 @@ Player.prototype.intersect = function(sprite) {
 	} else {
 		return false;
 	};
+};
+
+Player.prototype.updateScore = function() {
+	var margin = 10;
+	this.score.graphic.y = game.stage.pivot.y + margin;
+	this.score.text.text = 'Score: ' + this.floor;
 };
 
 /*=== BULLETS ===*/

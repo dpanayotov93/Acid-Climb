@@ -68,7 +68,7 @@ Floor.prototype.update = function() {
 			this.hole.door.destroy();
 			this.addBeam();
 			new Floor(n);			
-			game.player.floor.max++;
+			game.player.floor++;
 			this.hole.openned = true;
 		};
 	};
