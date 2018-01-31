@@ -15,6 +15,7 @@ function Game(options) {
 	this.ticker = PIXI.ticker.shared;
 	this.assets = this.loader.resources;
 	this.floors = new PIXI.Container;
+	this.acids = new PIXI.Container();
 	this.cursor = new PIXI.Sprite();
 	this.background = null;
 	this.player = null;
@@ -63,8 +64,8 @@ Game.prototype.init = function() {
 	this.enemyFactory = new Factory('ENEMY');
 
 	// Fill the screen with platforms
-	this.floors.y = game.screen.bottom - game.options.tileSize / 2;
 	this.stage.addChild(this.floors);
+	this.floors.y = this.screen.bottom - this.options.tileSize / 2;
 
 	for (var i = 0; i < (this.size.height / 2 + 1); i++) {
 		var n = this.floors.children.length;
@@ -74,9 +75,12 @@ Game.prototype.init = function() {
 	// Add the player
 	this.player = new Player(this.getInitialPlayerAnimations());
 
+	// Add the Acid ;)
+	this.addAcid();
+
 	// Show the controls on touch devices
 	if (mobileAndTabletcheck()) {
-		document.getElementById('mobile-controls').style.display = 'block';
+		// document.getElementById('mobile-controls').style.display = 'block';
 	};
 
 	// Add the cursor on top of everything
@@ -127,10 +131,34 @@ Game.prototype.addEvents = function() {
 	});	
 };
 
+Game.prototype.addAcid = function() {
+	var texture, acid;
+
+	for(var i = 0; i < this.size.height; i++) {
+		for(var j = -1; j < this.size.width + 2; j++) {
+			if(i === 0) {
+				texture = this.assets['tiles_atlas'].textures['Acid_001'];
+			} else {
+				texture = this.assets['tiles_atlas'].textures['Acid_002'];
+			};
+			acid = new PIXI.Sprite(texture);
+			acid.x = j * this.options.tileSize;
+			acid.y = i * this.options.tileSize;
+			acid.scale.set(this.options.ratio);
+
+			this.acids.addChild(acid);
+		};
+	};
+
+	this.acids.x = this.size.margin;
+	this.acids.y = this.screen.bottom - this.options.tileSize;
+	this.stage.addChild(this.acids);
+};
+
 Game.prototype.getInitialPlayerAnimations = function() {
 	// Extract the iddle frames from the atlas
 	var animations = [];
-	var iddleFrames = Object.keys(game.assets['char_atlas'].textures)
+	var iddleFrames = Object.keys(this.assets['char_atlas'].textures)
 		.filter(function(key) {
 			return key.includes('Walk_001') || key.includes('Walk_002') || key.includes('Walk_003')
 		});

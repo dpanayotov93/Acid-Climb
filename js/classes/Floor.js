@@ -145,8 +145,9 @@ Floor.prototype.addBeam = function() {
 	); // TODO: MAYBE Create a Beam class (Either that or just a hole class)
 
 	this.hole.beam.x = (this.hole.position * game.options.tileSize) + (this.hole.beam.width / 1.325 * game.options.ratio);
+	// this.hole.beam.y = game.options.ratio;
 	this.hole.beam.scale.set(game.options.ratio);
-	this.hole.beam.anchor.set(.5, .25 * game.options.ratio);	
+	this.hole.beam.anchor.set(0.5, 0.25);	
 
 	// Add the beam to the floor
 	this.addChild(this.hole.beam);	
