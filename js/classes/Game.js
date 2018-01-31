@@ -48,6 +48,7 @@ Game.prototype.load = function() {
 }
 
 Game.prototype.init = function() {
+	// this.renderer = new PIXI.WebGLRenderer (this.size.width, this.size.height);
 	// Add the game view to the page	
 	document.body.appendChild(this.view);
 
@@ -188,10 +189,8 @@ Game.prototype.update = function(time) {
 Game.prototype.updateCamera = function() {
 	var startDelta = Math.floor((game.floors.y - (game.options.tileSize / 2 + game.player.height / 2)) / 2);
 
-	if(this.player.y < this.screen.bottom - this.stage.height / 2) {
-		this.stage.pivot.y = this.player.y - startDelta;
-		this.background.y = this.stage.pivot.y;
-	};
+	this.stage.pivot.y = this.player.y - startDelta;
+	this.background.y = this.stage.pivot.y;
 };
 
 Game.prototype.render = function() {

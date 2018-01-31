@@ -13,6 +13,7 @@ window.onload = function() {
 		screenOffset: 16 * ratio,
 		// transparent: true,
 		roundPixels: true,
+		legacy: true,
 		maxWidth: maxWidth,
 		ratio: ratio,
 		tileSize: 256 * ratio
@@ -30,5 +31,6 @@ window.mobileAndTabletcheck = function() {
 };
 
 window.rnd = function(min, max) {
-  return Math.floor(min + Math.random()*(max+1 - min))
+	var random = Math.floor(min + Math.random()*(max+1 - min));
+	return random;
 };
