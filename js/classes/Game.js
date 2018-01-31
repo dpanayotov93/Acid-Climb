@@ -149,7 +149,8 @@ Game.prototype.addAcid = function() {
 			this.acids.addChild(acid);
 		};
 	};
-
+	//  TODO: Make an acid class
+	//  
 	this.acids.x = this.size.margin;
 	this.acids.y = this.screen.bottom - this.options.tileSize;
 	this.stage.addChild(this.acids);
