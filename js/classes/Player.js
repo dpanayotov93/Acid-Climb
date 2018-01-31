@@ -33,6 +33,7 @@ function Player(iddleAnimation) {
 	};
 	this.bullets = [];
 	this.holdingTouch = false;
+	this.healthbar = new PIXI.Graphics();
 	this.score = { 
 		graphic: new PIXI.Graphics(),
 		text: ''
@@ -52,6 +53,9 @@ Player.prototype.init = function() {
 
 	// Setup the class events
 	this.addEvents();
+
+	// Add the healthbar
+	this.addHealthbar();
 
 	// Add the score graphic
 	this.addScore();	
@@ -101,6 +105,14 @@ Player.prototype.addEvents = function() {
 	};
 };
 
+Player.prototype.addHealthbar = function() {	
+	this.healthbar.beginFill(0x3333EE);
+	this.healthbar.lineStyle(1, 0xFFFF00);
+	this.healthbar.drawRect(-this.width / 2, -this.height / 2 - 50, this.width, 10);
+
+	this.addChild(this.healthbar);	
+};
+
 Player.prototype.addScore = function() {
 	this.score.text = new PIXI.Text('Score: ' + this.floor, {fontFamily : 'Arial', fontSize: 24, fill : 'white', align : 'center'});
 	this.score.text.anchor.set(0.5, -0.5);
@@ -131,6 +143,9 @@ Player.prototype.updater = function() {
 
 	// Update the score
 	this.updateScore();
+
+	// Update the healthbar
+	this.healthbar.scale.x = this.stats.health / 100;
 
 	// Check the collisions
 	this.collision = this.detectCollision();
