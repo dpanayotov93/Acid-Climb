@@ -27,7 +27,7 @@ Factory.prototype.spawn = function() {
 
 Factory.prototype.spawnEnemy = function(x, direction) {
 	// var enemyTypeId = rnd(0, this.enemies.length -1 );
-	var enemyTypeId = 1;
+	var enemyTypeId = 3;
 	var enemyType = this.enemies[enemyTypeId];
 	var enemyClass = this.classes[enemyType];
 	var margin = this.margins[enemyTypeId];

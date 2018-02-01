@@ -42,14 +42,13 @@ Flydemon.prototype.updateFireballs = function() {
 			var fireball = this.fireballs[i];
 			var isFireballInPlayerRange = Math.abs(fireball.getGlobalPosition().x - game.player.getGlobalPosition().x) < game.player.width / 2;
 
-			if (fireball.x > game.screen.width || fireball.x < 0 || isFireballInPlayerRange) {
+			if(fireball.x > game.screen.width || fireball.x < 0 || isFireballInPlayerRange) {
 				if(isFireballInPlayerRange) {
 					game.player.damage(this.stats.damage);
 				};	
 
 				fireball.destroy();
 				this.fireballs.splice(i, 1);
-
 			} else {
 				fireball.x += 15 * -this.direction;
 				fireball.rotation += 1;
