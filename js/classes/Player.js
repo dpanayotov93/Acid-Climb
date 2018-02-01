@@ -138,6 +138,11 @@ Player.prototype.onKeyDown = function(e) {
 };
 
 Player.prototype.updater = function() {
+	// Check if the game is over
+	if(this.stats.health <= 0) {
+		this.die();
+	};
+
 	// Update the camera
 	game.updateCamera();
 
@@ -308,6 +313,19 @@ Player.prototype.updateScore = function() {
 	var margin = 10;
 	this.score.graphic.y = game.stage.pivot.y + margin;
 	this.score.text.text = 'Score: ' + this.floor;
+};
+
+Player.prototype.die = function() {
+	var gameoverText = new PIXI.Text('GAME OVER', {fontFamily : 'Arial', fontSize: 64, fill : 'white', align : 'center'});
+	console.log(game.screen.height / 2, gameoverText.height / 2);
+	gameoverText.x = game.screen.width / 2 - gameoverText.width / 2;
+	gameoverText.y = game.screen.height / 4 + gameoverText.height / 2 + game.stage.pivot.y;
+	
+	game.stage.addChild(gameoverText);
+
+	this.visible = false;
+
+	game.ticker.stop();
 };
 
 /*=== BULLETS ===*/
