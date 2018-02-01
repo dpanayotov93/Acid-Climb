@@ -26,7 +26,8 @@ Factory.prototype.spawn = function() {
 };
 
 Factory.prototype.spawnEnemy = function(x, direction) {
-	var enemyTypeId = rnd(0, this.enemies.length -1 );
+	// var enemyTypeId = rnd(0, this.enemies.length -1 );
+	var enemyTypeId = 0;
 	var enemyType = this.enemies[enemyTypeId];
 	var enemyClass = this.classes[enemyType];
 	var margin = this.margins[enemyTypeId];
@@ -39,7 +40,6 @@ Factory.prototype.spawnEnemy = function(x, direction) {
 	};	
 
 	return new enemyClass(x, direction, margin, animations);
-	// return new Enemy(x, direction, margin, animations);
 };
 
 Factory.prototype.spawnItem = function() {

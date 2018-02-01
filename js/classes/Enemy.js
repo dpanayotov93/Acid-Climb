@@ -56,11 +56,6 @@ Enemy.prototype.updater = function() {
 	};	
 
 	this.isPlayerInRange = this.getPlayerInRange();
-	if(this.isPlayerInRange) {
-		this.tint = 0xFF0000;
-	} else {
-		this.tint = 0xFFFFFF;
-	};
 };
 
 Enemy.prototype.addHealthbar = function() {	

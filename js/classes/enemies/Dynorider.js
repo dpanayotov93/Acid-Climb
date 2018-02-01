@@ -10,3 +10,6 @@ Dynorider.prototype = Object.create(Enemy.prototype);
 Dynorider.prototype.constructor = Dynorider;
 
 // Methods
+Dynorider.prototype.attack = function() {
+
+};

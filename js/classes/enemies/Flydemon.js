@@ -10,3 +10,6 @@ Flydemon.prototype = Object.create(Enemy.prototype);
 Flydemon.prototype.constructor = Flydemon;
 
 // Methods
+Flydemon.prototype.attack = function() {
+
+};

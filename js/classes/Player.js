@@ -242,6 +242,10 @@ Player.prototype.shoot = function(mouse) {
 	}
 };
 
+Player.prototype.damage = function(value) {	
+	this.stats.health -= value;
+};
+
 Player.prototype.detectCollision = function() {
 	var collision = {
 		top: false,
