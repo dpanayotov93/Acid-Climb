@@ -16,6 +16,7 @@ function Floor(n) {
 		left: null,
 		right: null
 	};
+	this.tint = 0xFFFFFF;
 
 	this.init(); // Run this on creation
 };
@@ -34,6 +35,9 @@ Floor.prototype.init = function() {
 	if(this.n > 0) {
 		this.setEnemySpawns();		
 	};
+
+	// Set the floor tint
+	this.tint = this.getRandomColor();
 
 	// Fill the floor with tiles
 	this.fillFloor();
@@ -122,6 +126,7 @@ Floor.prototype.addTile = function(x) {
 	tile.x = x + (tile.width / 2 * game.options.ratio) + game.size.margin;
 	tile.scale.set(game.options.ratio);
 	tile.anchor.set(.5);
+	tile.tint = this.tint;
 
 	// Add the tile to the floor
 	this.addChild(tile);
@@ -152,4 +157,9 @@ Floor.prototype.addBeam = function() {
 
 	// Add the beam to the floor
 	this.addChild(this.hole.beam);	
+};
+
+Floor.prototype.getRandomColor = function() {
+	var color = '0x' + Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+	return color;
 };

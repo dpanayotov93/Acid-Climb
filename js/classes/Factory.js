@@ -2,8 +2,14 @@
 
 function Factory(type) {
 	this.TYPES = {ENEMY: 'ENEMY', ITEM: 'ITEM'};
-	this.enemies = ['gorillabird', 'flydemon', 'dynorider', 'dynorider2'];
 	this.margins = [10, -50, -5, 0];
+	this.enemies = ['gorillabird', 'flydemon', 'dynorider', 'dynorider2'];
+	this.classes = {
+		'gorillabird': Gorillabird, 
+		'flydemon': Flydemon, 
+		'dynorider': Dynorider,
+		'dynorider2': Dynorider2
+	};
 	this.type = type;
 };
 
@@ -22,6 +28,7 @@ Factory.prototype.spawn = function() {
 Factory.prototype.spawnEnemy = function(x, direction) {
 	var enemyTypeId = rnd(0, this.enemies.length -1 );
 	var enemyType = this.enemies[enemyTypeId];
+	var enemyClass = this.classes[enemyType];
 	var margin = this.margins[enemyTypeId];
 	var frames = Object.keys(game.assets[enemyType].textures);
 	var animations = [];
@@ -31,7 +38,8 @@ Factory.prototype.spawnEnemy = function(x, direction) {
 		animations.push(PIXI.Texture.fromFrame(frames[i]));
 	};	
 
-	return new Enemy(x, direction, margin, animations);
+	return new enemyClass(x, direction, margin, animations);
+	// return new Enemy(x, direction, margin, animations);
 };
 
 Factory.prototype.spawnItem = function() {

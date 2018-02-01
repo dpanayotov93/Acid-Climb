@@ -18,6 +18,7 @@ function Enemy(x, direction, margin, iddleAnimation) {
 		gravity: 10,
 		fireRate: 30
 	};
+	this.isPlayerInRange = false;
 	this.healthbar = new PIXI.Graphics();
 
 	this.init();
@@ -51,7 +52,15 @@ Enemy.prototype.updater = function() {
 	this.healthbar.scale.x = this.stats.health / 100;
 	if(this.stats.health <= 0) {
 		this.destroy();
+		return;
 	};	
+
+	this.isPlayerInRange = this.getPlayerInRange();
+	if(this.isPlayerInRange) {
+		this.tint = 0xFF0000;
+	} else {
+		this.tint = 0xFFFFFF;
+	};
 };
 
 Enemy.prototype.addHealthbar = function() {	
@@ -64,4 +73,10 @@ Enemy.prototype.addHealthbar = function() {
 
 Enemy.prototype.damage = function(value) {	
 	this.stats.health -= value;
+};
+
+Enemy.prototype.getPlayerInRange = function() {
+	var dist = Math.abs(this.getGlobalPosition().y - game.player.getGlobalPosition().y);
+	var inRange = dist < game.options.tileSize;
+	return inRange;
 };
