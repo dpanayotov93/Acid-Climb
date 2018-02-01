@@ -3,10 +3,8 @@
 function Gorillabird(x, direction, margin, iddleAnimation) {
 	// Extend the PIXI.extras.AnimatedSprite class
 	Enemy.call(this, x, direction, margin, iddleAnimation);
+};
 
-	this.addSkill();
-}
-;
 // Assign the prototype and constructor
 Gorillabird.prototype = Object.create(Enemy.prototype);
 Gorillabird.prototype.constructor = Gorillabird;
@@ -23,7 +21,6 @@ Gorillabird.prototype.addSkill = function() {
 		var playerTileX = Math.floor(game.player.x / game.options.tileSize);
 		if(this.isPlayerInRange && playerTileX === this.tileX && this.currentFrame % 2 === 0) {
 			game.player.damage(this.stats.damage);
-			console.log(game.player.stats.health);
 		};	
 	};
 };

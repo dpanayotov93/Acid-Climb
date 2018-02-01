@@ -42,6 +42,7 @@ Game.prototype.load = function() {
 		.add('beam', 'assets/objects/portal_beam.png')
 		.add('crosshair', 'assets/objects/crosshair.png')
 		.add('bullet', 'assets/objects/bullet.png')
+		.add('fireball', 'assets/objects/fireball.png')
 		.load(function() {
 			game.init(); // Call the init method once all assets have been loaded
 		});

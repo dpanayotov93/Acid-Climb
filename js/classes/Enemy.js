@@ -22,6 +22,7 @@ function Enemy(x, direction, margin, iddleAnimation) {
 	this.healthbar = new PIXI.Graphics();
 
 	this.init();
+	this.addSkill();
 };
 
 // Assign the prototype and constructor
@@ -72,6 +73,13 @@ Enemy.prototype.damage = function(value) {
 
 Enemy.prototype.getPlayerInRange = function() {
 	var dist = Math.abs(this.getGlobalPosition().y - game.player.getGlobalPosition().y);
-	var inRange = dist < game.options.tileSize;
-	return inRange;
+	var floor = this.parent.parent;
+	var inRangeX = dist < game.options.tileSize;
+	var inRangeY = Math.abs(game.player.getGlobalPosition().y - floor.getGlobalPosition().y) > game.options.tileSize / 1.35;
+
+	if(inRangeX && inRangeY) {
+		return true;
+	};
+
+	return false;
 };
