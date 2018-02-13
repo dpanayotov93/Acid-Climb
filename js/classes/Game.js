@@ -165,7 +165,6 @@ Game.prototype.getInitialPlayerAnimations = function() {
 		.filter(function(key) {
 			return key.includes('Walk_001') || key.includes('Walk_002') || key.includes('Walk_003')
 		});
-	console.log(iddleFrames)
 
 	// Push the extracted frames to the iddle animations container
 	for (var i = 0; i < Object.keys(iddleFrames).length; i++) {
@@ -190,7 +189,7 @@ Game.prototype.update = function(time) {
 Game.prototype.updateCamera = function() {
 	var startDelta = Math.floor((game.floors.y - (game.options.tileSize / 2 + game.player.height / 2)) / 2);
 
-	this.stage.pivot.y = this.player.y - startDelta;
+	this.stage.pivot.y = this.player.y - startDelta - 300;
 	this.background.y = this.stage.pivot.y;
 };
 

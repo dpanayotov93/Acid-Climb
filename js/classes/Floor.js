@@ -47,7 +47,8 @@ Floor.prototype.init = function() {
 
 	// Add the enemies to the floor
 	this.enemies.noCollision = true;
-	this.enemies.y -= game.options.tileSize / 2 * game.options.ratio;
+	this.enemies.y -= game.options.tileSize;
+
 	this.addChild(this.enemies);
 
 	game.ticker.add(this.update.bind(this));
@@ -106,12 +107,10 @@ Floor.prototype.fillFloor = function() {
 		};
 
 		if(i === this.spawns.left) {
-			var enemy = game.enemyFactory.spawn({x: this.spawns.left, direction: -1});
-			enemy.floor = this;
+			var enemy = game.enemyFactory.spawn({x: this.spawns.left, direction: -1, floor: this});
 			this.enemies.addChild(enemy);
 		} else if(i === this.spawns.right) {
-			var enemy = game.enemyFactory.spawn({x: this.spawns.right, direction: 1});
-			enemy.floor = this;
+			var enemy = game.enemyFactory.spawn({x: this.spawns.right, direction: 1, floor: this});
 			this.enemies.addChild(enemy);
 		};
 	};

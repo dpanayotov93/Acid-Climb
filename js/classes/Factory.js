@@ -17,7 +17,7 @@ Factory.prototype.spawn = function() {
 	var args = arguments[0];
 	
 	if(this.type === this.TYPES.ENEMY) {
-		return this.spawnEnemy(args.x, args.direction);
+		return this.spawnEnemy(args.x, args.direction, args.floor);
 	};
 
 	if(this.type === this.TYPES.ITEM) {
@@ -25,7 +25,7 @@ Factory.prototype.spawn = function() {
 	};	
 };
 
-Factory.prototype.spawnEnemy = function(x, direction) {
+Factory.prototype.spawnEnemy = function(x, direction, floor) {
 	var enemyTypeId = rnd(0, this.enemies.length -1);
 	var enemyType = this.enemies[enemyTypeId];
 	var enemyClass = this.classes[enemyType];
@@ -38,7 +38,7 @@ Factory.prototype.spawnEnemy = function(x, direction) {
 		animations.push(PIXI.Texture.fromFrame(frames[i]));
 	};	
 
-	return new enemyClass(x, direction, margin, animations);
+	return new enemyClass(x, direction, margin, animations, floor);
 };
 
 Factory.prototype.spawnItem = function() {

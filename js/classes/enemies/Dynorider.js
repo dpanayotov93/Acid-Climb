@@ -1,8 +1,8 @@
 'use strict';
 
-function Dynorider(x, direction, margin, iddleAnimation) {
+function Dynorider(x, direction, margin, iddleAnimation, floor) {
 	// Extend the PIXI.extras.AnimatedSprite class
-	Enemy.call(this, x, direction, margin, iddleAnimation);
+	Enemy.call(this, x, direction, margin, iddleAnimation, floor);
 
 	this.stats.speed = 0.5;
 };

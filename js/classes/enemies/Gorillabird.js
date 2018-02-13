@@ -1,8 +1,8 @@
 'use strict';
 
-function Gorillabird(x, direction, margin, iddleAnimation) {
+function Gorillabird(x, direction, margin, iddleAnimation, floor) {
 	// Extend the PIXI.extras.AnimatedSprite class
-	Enemy.call(this, x, direction, margin, iddleAnimation);
+	Enemy.call(this, x, direction, margin, iddleAnimation, floor);
 };
 
 // Assign the prototype and constructor
