@@ -1,0 +1,35 @@
+{
+  "name": "acid-climb",
+  "version": "1.0.0",
+  "description": "Futuristic climbing and jump game (with shooting! :D)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpanayotov93/Acid-Climb.git"
+  },
+  "keywords": [
+    "climber",
+    "pixi",
+    "pixijs",
+    "game",
+    "webapp",
+    "2d",
+    "shooting",
+    "javascript",
+    "html",
+    "canvas"
+  ],
+  "author": "Dimitar Panayotov <dpanayotov93@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dpanayotov93/Acid-Climb/issues"
+  },
+  "homepage": "https://github.com/dpanayotov93/Acid-Climb#readme",
+  "devDependencies": {
+    "live-server": "^1.2.0"
+  }
+}
