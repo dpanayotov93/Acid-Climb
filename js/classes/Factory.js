@@ -4,7 +4,7 @@ function Factory(type) {
 	this.TYPES = {ENEMY: 'ENEMY', ITEM: 'ITEM'};
 	this.margins = [10, -50, -5, 0];
 	this.enemies = ['gorillabird', 'flydemon', 'dynorider', 'dynorider2'];
-	this.classes = {
+	this.enemyClasses = {
 		'gorillabird': Gorillabird, 
 		'flydemon': Flydemon, 
 		'dynorider': Dynorider,
@@ -21,14 +21,14 @@ Factory.prototype.spawn = function() {
 	};
 
 	if(this.type === this.TYPES.ITEM) {
-		this.spawnItem();
+		this.spawnItem(args.x, args.y);
 	};	
 };
 
 Factory.prototype.spawnEnemy = function(x, direction, floor) {
 	var enemyTypeId = rnd(0, this.enemies.length -1);
 	var enemyType = this.enemies[enemyTypeId];
-	var enemyClass = this.classes[enemyType];
+	var enemyClass = this.enemyClasses[enemyType];
 	var margin = this.margins[enemyTypeId];
 	var frames = Object.keys(game.assets[enemyType].textures);
 	var animations = [];
@@ -41,6 +41,10 @@ Factory.prototype.spawnEnemy = function(x, direction, floor) {
 	return new enemyClass(x, direction, margin, animations, floor);
 };
 
-Factory.prototype.spawnItem = function() {
-	console.log('Spawning Item');	
+Factory.prototype.spawnItem = function(x, y) {
+	// var itemTypeId = rnd(0, this.items.length - 1);
+	// var itemType = this.items[itemTypeId];
+	// var itemClass = this.itemClasses[itemType];
+
+	// return new itemClass(x, y)
 };

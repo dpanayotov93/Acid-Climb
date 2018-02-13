@@ -65,6 +65,9 @@ Game.prototype.init = function() {
 	// Initialize the enemy factory
 	this.enemyFactory = new Factory('ENEMY');
 
+	// Initialize the item factory
+	this.enemyFactory = new Factory('ITEM');
+
 	// Fill the screen with platforms
 	this.stage.addChild(this.floors);
 	this.floors.y = this.screen.bottom - this.options.tileSize / 2;

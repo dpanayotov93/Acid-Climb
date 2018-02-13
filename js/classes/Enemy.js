@@ -51,7 +51,7 @@ Enemy.prototype.init = function() {
 Enemy.prototype.updater = function() {
 	this.healthbar.scale.x = this.stats.health / 100;
 	if(this.stats.health <= 0) {
-		this.destroy();
+		this.die();
 		return;
 	};	
 
@@ -81,4 +81,19 @@ Enemy.prototype.getPlayerInRange = function() {
 	};
 
 	return false;
+};
+
+Enemy.prototype.dropItem = function() {
+	game.itemFactory.spawn();
+};
+
+Enemy.prototype.die = function() {
+	var itemDropChance = rnd(0, 100);
+	var itemDropChanceValue = rnd(0, 100);
+
+	if(itemDropChance > itemDropChanceValue) {
+		this.dropItem();
+	};
+
+	this.destroy();
 };
